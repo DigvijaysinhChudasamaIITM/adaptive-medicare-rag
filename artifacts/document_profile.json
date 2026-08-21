@@ -1,0 +1,15 @@
+{
+  "document_id": "medicare",
+  "document_sha256": "89ba6c75d91a2cb606fd53606366d1ae977d6e5c703335569814117dcce6add9",
+  "page_count": 128,
+  "body_font_size": 11.0,
+  "semantic_unit_count": 2056,
+  "unit_counts": {
+    "heading": 547,
+    "paragraph": 1100,
+    "list_item": 409
+  },
+  "pages_without_semantic_units": [
+    127
+  ]
+}

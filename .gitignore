@@ -35,3 +35,6 @@ artifacts/tmp/
 build/
 dist/
 *.egg-info/
+
+# Development inspection output
+artifacts/*_inspection.txt
