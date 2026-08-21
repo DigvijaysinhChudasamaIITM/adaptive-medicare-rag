@@ -1,0 +1,50 @@
+{
+  "document_id": "medicare",
+  "document_sha256": "89ba6c75d91a2cb606fd53606366d1ae977d6e5c703335569814117dcce6add9",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "hard_limit": 512,
+  "candidate_targets": [
+    128,
+    192,
+    320,
+    416
+  ],
+  "strategies": [
+    {
+      "strategy_id": "target_128",
+      "target_tokens": 128,
+      "chunk_count": 798,
+      "mean_tokens": 86.82,
+      "median_tokens": 92.0,
+      "max_tokens": 260,
+      "chunks_over_soft_target": 53
+    },
+    {
+      "strategy_id": "target_192",
+      "target_tokens": 192,
+      "chunk_count": 632,
+      "mean_tokens": 107.11,
+      "median_tokens": 109.0,
+      "max_tokens": 260,
+      "chunks_over_soft_target": 14
+    },
+    {
+      "strategy_id": "target_320",
+      "target_tokens": 320,
+      "chunk_count": 523,
+      "mean_tokens": 127.16,
+      "median_tokens": 106,
+      "max_tokens": 320,
+      "chunks_over_soft_target": 0
+    },
+    {
+      "strategy_id": "target_416",
+      "target_tokens": 416,
+      "chunk_count": 481,
+      "mean_tokens": 137.37,
+      "median_tokens": 106,
+      "max_tokens": 411,
+      "chunks_over_soft_target": 0
+    }
+  ]
+}

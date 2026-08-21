@@ -38,3 +38,6 @@ dist/
 
 # Development inspection output
 artifacts/*_inspection.txt
+
+# Generated candidate chunk corpora
+artifacts/chunks/

@@ -50,3 +50,20 @@ class ParsedDocument:
     page_count: int
     body_font_size: float
     units: tuple[DocumentUnit, ...]
+
+@dataclass(frozen=True, slots=True)
+class DocumentChunk:
+    """A retrieval chunk constructed from semantic document units."""
+
+    chunk_id: str
+    strategy_id: str
+    target_tokens: int
+    token_count: int
+    text: str
+    heading_context: tuple[str, ...]
+    page_numbers: tuple[int, ...]
+    page_start: int
+    page_end: int
+    section_index: int
+    chunk_index: int
+    source_unit_orders: tuple[int, ...]

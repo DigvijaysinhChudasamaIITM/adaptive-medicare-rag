@@ -239,44 +239,183 @@ Proposed Implementation
 app/rag/vector_store.py
 
 --------------------------------------------------------------------
-Decision 007 — Derive chunk candidates from document statistics
+## Decision 007 — Derive chunk candidates from document statistics
 
-Status: Planned — dynamic chunking phase not yet implemented
+**Status:** In Progress — document-derived candidate generation and
+structure-aware chunk construction implemented; retrieval evaluation pending
 
-Proposed Decision
+### Decision
 
-Do not use one user-defined or arbitrarily hardcoded chunk size.
+Do not use a user-defined or arbitrarily hardcoded chunk size.
 
-Generate candidate target sizes from observed document statistics such as:
+Candidate chunk targets are derived automatically from measured characteristics
+of the supplied document, including:
 
-paragraph/unit token distributions;
-percentiles;
-section characteristics;
-practical model constraints.
+- semantic-unit token distributions;
+- paragraph token distributions;
+- reconstructed structural-section distributions;
+- percentile statistics;
+- embedding-model token constraints.
 
-Evaluate the resulting candidates empirically.
+All derived candidates are processed using the same structure-aware chunking
+algorithm. Their retrieval performance will be evaluated empirically before a
+final strategy is selected.
 
-Rationale
+### Evidence
+
+Token profiling with the tokenizer associated with
+`BAAI/bge-small-en-v1.5` produced:
+
+- 2,056 semantic units;
+- maximum semantic-unit length of 245 tokens;
+- no semantic unit exceeding the 512-token model limit;
+- 453 reconstructed structural sections;
+- section median of 100 tokens;
+- section P75 of 187 tokens;
+- section P90 of 331.8 tokens;
+- section P95 of 412.2 tokens;
+- 16 structural sections exceeding the 512-token model limit;
+- maximum structural-section length of 1,396 tokens.
+
+These measurements indicate that normal semantic units can generally remain
+intact while large structural sections must be divided at semantic-unit
+boundaries.
+
+### Structural Section Reconstruction
+
+Consecutive heading lines on the same page are kept together so that visually
+split headings remain one logical heading.
+
+A heading appearing on a new physical page starts a new structural section
+when the preceding section contains only heading material. This prevents
+unrelated page-level headings from being merged simply because no paragraph
+occurred between them.
+
+This refinement was identified through manual inspection of the supplied
+Medicare document.
+
+### Candidate Derivation
+
+Candidate targets are generated from document statistics rather than supplied
+by the user or stored as a fixed list.
+
+The derivation uses:
+
+- the greater of section median and paragraph P95;
+- section P75;
+- section P90;
+- section P95.
+
+Raw values are normalized to the nearest practical 32-token boundary,
+deduplicated, sorted, and capped by the embedding model's maximum token length.
+
+For the supplied Medicare document, this produces:
+
+`128, 192, 320, 416`
+
+These values are outputs of the derivation logic, not hardcoded chunk-size
+configuration.
+
+### Candidate Corpus Construction
+
+Each candidate target is applied using the same structure-aware chunking
+algorithm so that subsequent evaluation compares chunk size rather than
+different chunking algorithms.
+
+The candidate target is treated as a soft packing objective rather than a
+destructive boundary.
+
+Complete paragraphs and list items are preserved whenever they fit within the
+embedding model's hard token limit. Oversized structural sections are divided
+by greedily packing complete semantic units.
+
+Leading heading context is retained for continuation chunks.
+
+The embedding model's 512-token maximum is treated as a hard constraint.
+
+For the supplied Medicare document, candidate construction produced:
+
+| Target | Chunks | Mean tokens | Median tokens | Max tokens | Above soft target |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 128 | 798 | 86.82 | 92 | 260 | 53 |
+| 192 | 632 | 107.11 | 109 | 260 | 14 |
+| 320 | 523 | 127.16 | 106 | 320 | 0 |
+| 416 | 481 | 137.37 | 106 | 411 | 0 |
+
+Chunks exceeding the 128- or 192-token soft target occur when preserving an
+entire semantic unit is preferable to splitting it solely to meet the target.
+
+No generated chunk exceeds the 512-token hard limit.
+
+### Rationale
 
 Dynamic chunk-size selection is a primary requirement of the assignment.
 
-A fixed chunk size presented as "dynamic" would not satisfy that requirement.
+Using a conventional fixed value such as 256 or 512 tokens and labeling it
+dynamic would not satisfy that requirement.
 
-Validation Required
+Deriving candidate sizes from measured document characteristics makes the
+process document-adaptive, reproducible, and explainable.
 
-Candidate strategies will be evaluated using:
+However, document statistics alone do not determine the final winner.
+Retrieval quality will determine which candidate strategy is ultimately
+selected.
 
-Recall@K;
-MRR;
-NDCG@K;
-boundary quality;
-length efficiency;
-lightweight semantic coherence if it provides useful signal.
-Proposed Implementation
+### Validation Completed
 
-app/rag/chunking.py
+The current implementation verifies that:
 
-app/rag/chunk_evaluation.py
+- consecutive heading lines on the same page remain together;
+- headings crossing into a new physical page are separated when appropriate;
+- candidate targets are derived from supplied document statistics;
+- values are normalized to practical token boundaries;
+- duplicate targets are removed;
+- targets respect embedding-model constraints;
+- semantic units are preserved rather than unnecessarily split;
+- continuation chunks retain heading context;
+- chunk identifiers are deterministic and unique;
+- source-unit coverage is preserved;
+- page provenance is retained;
+- all candidate corpora contain non-empty chunks;
+- no generated chunk exceeds the 512-token hard limit.
+
+### Validation Remaining
+
+Candidate strategies still require empirical retrieval evaluation.
+
+Planned metrics include:
+
+- Recall@K;
+- Mean Reciprocal Rank (MRR);
+- NDCG@K;
+- semantic-boundary preservation;
+- chunk-length efficiency;
+- lightweight semantic coherence if it provides useful discriminative signal.
+
+The final chunk strategy will be selected only after retrieval evaluation.
+
+### Implementation
+
+Implemented:
+
+- `app/rag/chunking.py`
+- `app/rag/tokenization.py`
+- `scripts/profile_token_lengths.py`
+- `scripts/build_candidate_chunks.py`
+- `tests/test_tokenization.py`
+- `tests/test_chunking.py`
+
+Generated evidence:
+
+- `artifacts/token_profile.json`
+- `artifacts/chunk_strategy_profile.json`
+
+Generated candidate corpora under `artifacts/chunks/` are reproducible build
+artifacts and are not committed to source control.
+
+Planned:
+
+- `app/rag/chunk_evaluation.py`
 
 -----------------------------------------------------------------
 Decision 008 — Backend owns citation and confidence metadata

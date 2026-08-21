@@ -1,0 +1,197 @@
+{
+  "document_id": "medicare",
+  "document_sha256": "89ba6c75d91a2cb606fd53606366d1ae977d6e5c703335569814117dcce6add9",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "tokenizer_model_max_length": 512,
+  "unit_statistics": {
+    "all": {
+      "count": 2056,
+      "min": 3,
+      "mean": 33.54,
+      "median": 20.0,
+      "p25": 9.0,
+      "p75": 47.0,
+      "p90": 82.0,
+      "p95": 103.0,
+      "max": 245
+    },
+    "heading": {
+      "count": 547,
+      "min": 3,
+      "mean": 8.25,
+      "median": 6,
+      "p25": 4.0,
+      "p75": 10.0,
+      "p90": 15.0,
+      "p95": 18.0,
+      "max": 64
+    },
+    "paragraph": {
+      "count": 1100,
+      "min": 3,
+      "mean": 47.96,
+      "median": 37.0,
+      "p25": 18.0,
+      "p75": 69.0,
+      "p90": 101.0,
+      "p95": 121.0,
+      "max": 245
+    },
+    "list_item": {
+      "count": 409,
+      "min": 3,
+      "mean": 28.61,
+      "median": 22,
+      "p25": 14.0,
+      "p75": 36.0,
+      "p90": 55.4,
+      "p95": 76.2,
+      "max": 131
+    }
+  },
+  "structural_section_statistics": {
+    "count": 453,
+    "min": 3,
+    "mean": 145.17,
+    "median": 100,
+    "p25": 44.0,
+    "p75": 187.0,
+    "p90": 331.8,
+    "p95": 412.2,
+    "max": 1396
+  },
+  "structural_section_count": 453,
+  "oversized_section_count": 16,
+  "oversized_sections": [
+    {
+      "section_index": 7,
+      "page_start": 3,
+      "page_end": 3,
+      "unit_count": 18,
+      "token_count": 1396,
+      "heading_preview": "Contents"
+    },
+    {
+      "section_index": 87,
+      "page_start": 23,
+      "page_end": 24,
+      "unit_count": 15,
+      "token_count": 770,
+      "heading_preview": "How can I pay my Part B premium?"
+    },
+    {
+      "section_index": 126,
+      "page_start": 35,
+      "page_end": 36,
+      "unit_count": 15,
+      "token_count": 650,
+      "heading_preview": "Colorectal cancer screenings"
+    },
+    {
+      "section_index": 129,
+      "page_start": 37,
+      "page_end": 38,
+      "unit_count": 19,
+      "token_count": 542,
+      "heading_preview": "COVID-19 (Coronavirus disease 2019)"
+    },
+    {
+      "section_index": 190,
+      "page_start": 52,
+      "page_end": 53,
+      "unit_count": 9,
+      "token_count": 637,
+      "heading_preview": "Transplants & immunosuppressive drugs"
+    },
+    {
+      "section_index": 222,
+      "page_start": 64,
+      "page_end": 65,
+      "unit_count": 15,
+      "token_count": 605,
+      "heading_preview": "What should I know about Medicare Advantage Plans?"
+    },
+    {
+      "section_index": 223,
+      "page_start": 65,
+      "page_end": 66,
+      "unit_count": 18,
+      "token_count": 887,
+      "heading_preview": "Important! If you already have Medigap and join a Medicare Advantage"
+    },
+    {
+      "section_index": 228,
+      "page_start": 70,
+      "page_end": 70,
+      "unit_count": 14,
+      "token_count": 574,
+      "heading_preview": "Special Needs Plan (SNP)"
+    },
+    {
+      "section_index": 246,
+      "page_start": 77,
+      "page_end": 78,
+      "unit_count": 12,
+      "token_count": 634,
+      "heading_preview": "What else should I know about Medigap?"
+    },
+    {
+      "section_index": 267,
+      "page_start": 83,
+      "page_end": 85,
+      "unit_count": 13,
+      "token_count": 1066,
+      "heading_preview": "What’s the Medicare drug coverage (Part D) late enrollment"
+    },
+    {
+      "section_index": 271,
+      "page_start": 86,
+      "page_end": 87,
+      "unit_count": 10,
+      "token_count": 687,
+      "heading_preview": "Plans may have coverage rules for certain drugs"
+    },
+    {
+      "section_index": 288,
+      "page_start": 91,
+      "page_end": 92,
+      "unit_count": 13,
+      "token_count": 589,
+      "heading_preview": "Section 7:"
+    },
+    {
+      "section_index": 293,
+      "page_start": 93,
+      "page_end": 94,
+      "unit_count": 13,
+      "token_count": 633,
+      "heading_preview": "Cost & coverage: Most people with Medicare can only switch plans at"
+    },
+    {
+      "section_index": 305,
+      "page_start": 99,
+      "page_end": 100,
+      "unit_count": 17,
+      "token_count": 733,
+      "heading_preview": "How do I file an appeal?"
+    },
+    {
+      "section_index": 317,
+      "page_start": 103,
+      "page_end": 105,
+      "unit_count": 27,
+      "token_count": 643,
+      "heading_preview": "How does Medicare use my personal information?"
+    },
+    {
+      "section_index": 318,
+      "page_start": 105,
+      "page_end": 106,
+      "unit_count": 14,
+      "token_count": 613,
+      "heading_preview": "How can I protect myself from fraud and medical identity"
+    }
+  ],
+  "oversized_unit_count": 0,
+  "oversized_units": []
+}
