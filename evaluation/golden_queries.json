@@ -1,0 +1,125 @@
+{
+  "version": 1,
+  "document_id": "medicare",
+  "description": "Manually verified positive retrieval queries labeled against pre-chunk semantic source units.",
+  "queries": [
+    {
+      "query_id": "q01",
+      "query": "What are the requirements to join a Medicare Advantage Plan?",
+      "category": "eligibility",
+      "evidence_groups": [
+        [1076],
+        [1077],
+        [1078]
+      ],
+      "gold_pages": [64]
+    },
+    {
+      "query_id": "q02",
+      "query": "How is the Medicare Part D late enrollment penalty calculated?",
+      "category": "calculation",
+      "evidence_groups": [
+        [1373]
+      ],
+      "gold_pages": [84]
+    },
+    {
+      "query_id": "q03",
+      "query": "How do I file a Medicare appeal?",
+      "category": "multi_evidence",
+      "evidence_groups": [
+        [1577],
+        [1579, 1580, 1581, 1582, 1583],
+        [1586],
+        [1587, 1588, 1589, 1591, 1592]
+      ],
+      "gold_pages": [99, 100]
+    },
+    {
+      "query_id": "q04",
+      "query": "When can I first sign up for Medicare?",
+      "category": "enrollment",
+      "evidence_groups": [
+        [342]
+      ],
+      "gold_pages": [17]
+    },
+    {
+      "query_id": "q05",
+      "query": "What happens if I miss my Medicare Initial Enrollment Period?",
+      "category": "enrollment",
+      "evidence_groups": [
+        [358],
+        [359]
+      ],
+      "gold_pages": [18]
+    },
+    {
+      "query_id": "q06",
+      "query": "What does Medicare Part B generally cover?",
+      "category": "coverage",
+      "evidence_groups": [
+        [532]
+      ],
+      "gold_pages": [29]
+    },
+    {
+      "query_id": "q07",
+      "query": "What is Medicare drug coverage Part D?",
+      "category": "coverage",
+      "evidence_groups": [
+        [1311],
+        [1312],
+        [1313]
+      ],
+      "gold_pages": [79]
+    },
+    {
+      "query_id": "q08",
+      "query": "When can I join or switch a Medicare Advantage Plan?",
+      "category": "multi_evidence",
+      "evidence_groups": [
+        [1169],
+        [1175, 1176],
+        [1180, 1181, 1182, 1183]
+      ],
+      "gold_pages": [71]
+    },
+    {
+      "query_id": "q09",
+      "query": "Can I have Medigap while I am in a Medicare Advantage Plan?",
+      "category": "coverage_rules",
+      "evidence_groups": [
+        [1091]
+      ],
+      "gold_pages": [65]
+    },
+    {
+      "query_id": "q10",
+      "query": "How can I avoid the Medicare Part D late enrollment penalty?",
+      "category": "prevention",
+      "evidence_groups": [
+        [1372]
+      ],
+      "gold_pages": [84]
+    },
+    {
+      "query_id": "q11",
+      "query": "Can someone represent me in a Medicare appeal?",
+      "category": "appeals",
+      "evidence_groups": [
+        [1594]
+      ],
+      "gold_pages": [100]
+    },
+    {
+      "query_id": "q12",
+      "query": "What happens to Medicare Advantage coverage if a plan leaves Medicare?",
+      "category": "plan_rules",
+      "evidence_groups": [
+        [1082]
+      ],
+      "gold_pages": [64]
+    }
+  ]
+}

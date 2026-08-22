@@ -1,0 +1,2891 @@
+{
+  "document_id": "medicare",
+  "document_sha256": "89ba6c75d91a2cb606fd53606366d1ae977d6e5c703335569814117dcce6add9",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "query_count": 12,
+  "k_values": [
+    1,
+    3,
+    5
+  ],
+  "selection_policy": [
+    "highest mean Recall@5",
+    "then highest mean MRR@5",
+    "then highest mean NDCG@5",
+    "then highest mean Precision@5",
+    "then lower mean chunk-token count"
+  ],
+  "strategies": [
+    {
+      "strategy_id": "target_128",
+      "target_tokens": 128,
+      "chunk_count": 798,
+      "mean_chunk_tokens": 86.81829573934837,
+      "aggregate": {
+        "precision_at_1": 0.4166666666666667,
+        "precision_at_3": 0.2777777777777778,
+        "precision_at_5": 0.21666666666666667,
+        "recall_at_1": 0.3402777777777778,
+        "recall_at_3": 0.5625,
+        "recall_at_5": 0.6805555555555556,
+        "group_recall_at_5": 0.6972222222222222,
+        "mrr_at_5": 0.5444444444444444,
+        "ndcg_at_5": 0.5724919557024755
+      },
+      "per_query": [
+        {
+          "query_id": "q01",
+          "category": "eligibility",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.891855,
+              "chunk_id": "medicare-t128-s0222-c00",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.826072,
+              "chunk_id": "medicare-t128-s0229-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.821333,
+              "chunk_id": "medicare-t128-s0222-c01",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.815606,
+              "chunk_id": "medicare-t128-s0254-c00",
+              "pages": [
+                80
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.801914,
+              "chunk_id": "medicare-t128-s0230-c00",
+              "pages": [
+                71
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q02",
+          "category": "calculation",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.887446,
+              "chunk_id": "medicare-t128-s0267-c00",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.882388,
+              "chunk_id": "medicare-t128-s0267-c03",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.854454,
+              "chunk_id": "medicare-t128-s0267-c06",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.84997,
+              "chunk_id": "medicare-t128-s0267-c08",
+              "pages": [
+                83,
+                85
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.839936,
+              "chunk_id": "medicare-t128-s0267-c01",
+              "pages": [
+                83,
+                84
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q03",
+          "category": "multi_evidence",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 0.08333333333333333,
+            "precision_at_3": 1.0,
+            "recall_at_3": 0.4166666666666667,
+            "precision_at_5": 0.8,
+            "recall_at_5": 0.5,
+            "group_recall_at_5": 0.7,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 0.8539316501572937
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.872775,
+              "chunk_id": "medicare-t128-s0305-c02",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.861583,
+              "chunk_id": "medicare-t128-s0305-c00",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.845704,
+              "chunk_id": "medicare-t128-s0305-c04",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.840519,
+              "chunk_id": "medicare-t128-s0306-c00",
+              "pages": [
+                100
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.820776,
+              "chunk_id": "medicare-t128-s0305-c03",
+              "pages": [
+                99
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q04",
+          "category": "enrollment",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.0,
+            "recall_at_3": 0.0,
+            "precision_at_5": 0.0,
+            "recall_at_5": 0.0,
+            "group_recall_at_5": 0.0,
+            "mrr_at_5": 0.0,
+            "ndcg_at_5": 0.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.811361,
+              "chunk_id": "medicare-t128-s0230-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.800808,
+              "chunk_id": "medicare-t128-s0254-c00",
+              "pages": [
+                80
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.799051,
+              "chunk_id": "medicare-t128-s0065-c00",
+              "pages": [
+                16
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.798936,
+              "chunk_id": "medicare-t128-s0232-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.798479,
+              "chunk_id": "medicare-t128-s0055-c01",
+              "pages": [
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q05",
+          "category": "enrollment",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.0,
+            "recall_at_3": 0.0,
+            "precision_at_5": 0.0,
+            "recall_at_5": 0.0,
+            "group_recall_at_5": 0.0,
+            "mrr_at_5": 0.0,
+            "ndcg_at_5": 0.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.81892,
+              "chunk_id": "medicare-t128-s0071-c00",
+              "pages": [
+                18
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.818534,
+              "chunk_id": "medicare-t128-s0230-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.808389,
+              "chunk_id": "medicare-t128-s0069-c02",
+              "pages": [
+                17
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.800032,
+              "chunk_id": "medicare-t128-s0069-c00",
+              "pages": [
+                17
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.794212,
+              "chunk_id": "medicare-t128-s0062-c01",
+              "pages": [
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q06",
+          "category": "coverage",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.882698,
+              "chunk_id": "medicare-t128-s0101-c00",
+              "pages": [
+                29
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.817655,
+              "chunk_id": "medicare-t128-s0199-c00",
+              "pages": [
+                55
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.789057,
+              "chunk_id": "medicare-t128-s0268-c01",
+              "pages": [
+                85
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.787664,
+              "chunk_id": "medicare-t128-s0207-c01",
+              "pages": [
+                57
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.782325,
+              "chunk_id": "medicare-t128-s0088-c01",
+              "pages": [
+                25
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q07",
+          "category": "coverage",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 0.3333333333333333,
+            "precision_at_5": 0.4,
+            "recall_at_5": 0.6666666666666666,
+            "group_recall_at_5": 0.6666666666666666,
+            "mrr_at_5": 0.5,
+            "ndcg_at_5": 0.49818925746641285
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.895831,
+              "chunk_id": "medicare-t128-s0042-c00",
+              "pages": [
+                9
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.873637,
+              "chunk_id": "medicare-t128-s0250-c01",
+              "pages": [
+                79
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.852104,
+              "chunk_id": "medicare-t128-s0268-c01",
+              "pages": [
+                85
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.85094,
+              "chunk_id": "medicare-t128-s0250-c00",
+              "pages": [
+                79
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.84839,
+              "chunk_id": "medicare-t128-s0007-c11",
+              "pages": [
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q08",
+          "category": "multi_evidence",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.0,
+            "recall_at_3": 0.0,
+            "precision_at_5": 0.0,
+            "recall_at_5": 0.0,
+            "group_recall_at_5": 0.0,
+            "mrr_at_5": 0.0,
+            "ndcg_at_5": 0.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.882953,
+              "chunk_id": "medicare-t128-s0252-c01",
+              "pages": [
+                80
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.874368,
+              "chunk_id": "medicare-t128-s0229-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.873187,
+              "chunk_id": "medicare-t128-s0252-c00",
+              "pages": [
+                80
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.870836,
+              "chunk_id": "medicare-t128-s0222-c01",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.853544,
+              "chunk_id": "medicare-t128-s0222-c00",
+              "pages": [
+                64
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q09",
+          "category": "coverage_rules",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.3333333333333333,
+            "ndcg_at_5": 0.5
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.905281,
+              "chunk_id": "medicare-t128-s0222-c06",
+              "pages": [
+                64,
+                65
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.89069,
+              "chunk_id": "medicare-t128-s0247-c01",
+              "pages": [
+                78
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.861943,
+              "chunk_id": "medicare-t128-s0223-c01",
+              "pages": [
+                65
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.853459,
+              "chunk_id": "medicare-t128-s0247-c00",
+              "pages": [
+                78
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.847546,
+              "chunk_id": "medicare-t128-s0223-c02",
+              "pages": [
+                65
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q10",
+          "category": "prevention",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.0,
+            "recall_at_3": 0.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.2,
+            "ndcg_at_5": 0.38685280723454163
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.908697,
+              "chunk_id": "medicare-t128-s0267-c01",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.868153,
+              "chunk_id": "medicare-t128-s0267-c00",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.833863,
+              "chunk_id": "medicare-t128-s0267-c03",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.830603,
+              "chunk_id": "medicare-t128-s0267-c09",
+              "pages": [
+                83,
+                85
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.828629,
+              "chunk_id": "medicare-t128-s0267-c02",
+              "pages": [
+                83,
+                84
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q11",
+          "category": "appeals",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.791245,
+              "chunk_id": "medicare-t128-s0306-c00",
+              "pages": [
+                100
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.763225,
+              "chunk_id": "medicare-t128-s0305-c02",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.762924,
+              "chunk_id": "medicare-t128-s0304-c00",
+              "pages": [
+                98
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.759615,
+              "chunk_id": "medicare-t128-s0305-c04",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.752357,
+              "chunk_id": "medicare-t128-s0302-c03",
+              "pages": [
+                97,
+                98
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q12",
+          "category": "plan_rules",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.862657,
+              "chunk_id": "medicare-t128-s0222-c01",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.814285,
+              "chunk_id": "medicare-t128-s0222-c05",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.795871,
+              "chunk_id": "medicare-t128-s0216-c00",
+              "pages": [
+                62
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.792945,
+              "chunk_id": "medicare-t128-s0222-c00",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.79277,
+              "chunk_id": "medicare-t128-s0214-c01",
+              "pages": [
+                61
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "strategy_id": "target_192",
+      "target_tokens": 192,
+      "chunk_count": 632,
+      "mean_chunk_tokens": 107.10917721518987,
+      "aggregate": {
+        "precision_at_1": 0.5,
+        "precision_at_3": 0.3055555555555555,
+        "precision_at_5": 0.25,
+        "recall_at_1": 0.4236111111111111,
+        "recall_at_3": 0.6875,
+        "recall_at_5": 0.8531746031746031,
+        "group_recall_at_5": 0.8444444444444444,
+        "mrr_at_5": 0.6666666666666666,
+        "ndcg_at_5": 0.6999579993067735
+      },
+      "per_query": [
+        {
+          "query_id": "q01",
+          "category": "eligibility",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.872088,
+              "chunk_id": "medicare-t192-s0222-c00",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.826072,
+              "chunk_id": "medicare-t192-s0229-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.815606,
+              "chunk_id": "medicare-t192-s0254-c00",
+              "pages": [
+                80
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.801914,
+              "chunk_id": "medicare-t192-s0230-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.800901,
+              "chunk_id": "medicare-t192-s0089-c00",
+              "pages": [
+                25
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q02",
+          "category": "calculation",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.886865,
+              "chunk_id": "medicare-t192-s0267-c00",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.882388,
+              "chunk_id": "medicare-t192-s0267-c02",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.84997,
+              "chunk_id": "medicare-t192-s0267-c05",
+              "pages": [
+                83,
+                85
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.837334,
+              "chunk_id": "medicare-t192-s0267-c04",
+              "pages": [
+                83,
+                84,
+                85
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.828302,
+              "chunk_id": "medicare-t192-s0267-c06",
+              "pages": [
+                83,
+                85
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q03",
+          "category": "multi_evidence",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 0.08333333333333333,
+            "precision_at_3": 1.0,
+            "recall_at_3": 0.5833333333333334,
+            "precision_at_5": 0.8,
+            "recall_at_5": 0.6666666666666666,
+            "group_recall_at_5": 0.8,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 0.8539316501572937
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.872775,
+              "chunk_id": "medicare-t192-s0305-c01",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.863823,
+              "chunk_id": "medicare-t192-s0305-c00",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.848915,
+              "chunk_id": "medicare-t192-s0305-c03",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.840519,
+              "chunk_id": "medicare-t192-s0306-c00",
+              "pages": [
+                100
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.822532,
+              "chunk_id": "medicare-t192-s0305-c02",
+              "pages": [
+                99
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q04",
+          "category": "enrollment",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.0,
+            "recall_at_3": 0.0,
+            "precision_at_5": 0.0,
+            "recall_at_5": 0.0,
+            "group_recall_at_5": 0.0,
+            "mrr_at_5": 0.0,
+            "ndcg_at_5": 0.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.811361,
+              "chunk_id": "medicare-t192-s0230-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.802957,
+              "chunk_id": "medicare-t192-s0072-c00",
+              "pages": [
+                18
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.800808,
+              "chunk_id": "medicare-t192-s0254-c00",
+              "pages": [
+                80
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.798936,
+              "chunk_id": "medicare-t192-s0232-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.795665,
+              "chunk_id": "medicare-t192-s0055-c00",
+              "pages": [
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q05",
+          "category": "enrollment",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.819724,
+              "chunk_id": "medicare-t192-s0072-c00",
+              "pages": [
+                18
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.81892,
+              "chunk_id": "medicare-t192-s0071-c00",
+              "pages": [
+                18
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.818534,
+              "chunk_id": "medicare-t192-s0230-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.797417,
+              "chunk_id": "medicare-t192-s0069-c01",
+              "pages": [
+                17
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.791232,
+              "chunk_id": "medicare-t192-s0057-c00",
+              "pages": [
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q06",
+          "category": "coverage",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.869404,
+              "chunk_id": "medicare-t192-s0101-c00",
+              "pages": [
+                29
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.817655,
+              "chunk_id": "medicare-t192-s0199-c00",
+              "pages": [
+                55
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.790832,
+              "chunk_id": "medicare-t192-s0088-c00",
+              "pages": [
+                25
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.782044,
+              "chunk_id": "medicare-t192-s0052-c00",
+              "pages": [
+                11
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.775507,
+              "chunk_id": "medicare-t192-s0061-c02",
+              "pages": [
+                15
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q07",
+          "category": "coverage",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 0.6666666666666666,
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.5,
+            "ndcg_at_5": 0.6509209298071326
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.895831,
+              "chunk_id": "medicare-t192-s0042-c00",
+              "pages": [
+                9
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.870835,
+              "chunk_id": "medicare-t192-s0250-c01",
+              "pages": [
+                79
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.869426,
+              "chunk_id": "medicare-t192-s0268-c01",
+              "pages": [
+                85
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.85094,
+              "chunk_id": "medicare-t192-s0250-c00",
+              "pages": [
+                79
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.842082,
+              "chunk_id": "medicare-t192-s0053-c01",
+              "pages": [
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q08",
+          "category": "multi_evidence",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.0,
+            "recall_at_3": 0.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 0.5714285714285714,
+            "group_recall_at_5": 0.3333333333333333,
+            "mrr_at_5": 0.25,
+            "ndcg_at_5": 0.20210734650054757
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.875057,
+              "chunk_id": "medicare-t192-s0252-c00",
+              "pages": [
+                80
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.874368,
+              "chunk_id": "medicare-t192-s0229-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.873092,
+              "chunk_id": "medicare-t192-s0222-c00",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.848446,
+              "chunk_id": "medicare-t192-s0232-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.82751,
+              "chunk_id": "medicare-t192-s0056-c01",
+              "pages": [
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q09",
+          "category": "coverage_rules",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.854962,
+              "chunk_id": "medicare-t192-s0247-c00",
+              "pages": [
+                78
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.850674,
+              "chunk_id": "medicare-t192-s0223-c00",
+              "pages": [
+                65
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.837531,
+              "chunk_id": "medicare-t192-s0223-c01",
+              "pages": [
+                65
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.82737,
+              "chunk_id": "medicare-t192-s0248-c01",
+              "pages": [
+                78
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.821288,
+              "chunk_id": "medicare-t192-s0222-c03",
+              "pages": [
+                64,
+                65
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q10",
+          "category": "prevention",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.0,
+            "recall_at_3": 0.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.25,
+            "ndcg_at_5": 0.43067655807339306
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.870127,
+              "chunk_id": "medicare-t192-s0267-c00",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.833863,
+              "chunk_id": "medicare-t192-s0267-c02",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.830603,
+              "chunk_id": "medicare-t192-s0267-c06",
+              "pages": [
+                83,
+                85
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.828629,
+              "chunk_id": "medicare-t192-s0267-c01",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.804617,
+              "chunk_id": "medicare-t192-s0222-c02",
+              "pages": [
+                64
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q11",
+          "category": "appeals",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.791245,
+              "chunk_id": "medicare-t192-s0306-c00",
+              "pages": [
+                100
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.763419,
+              "chunk_id": "medicare-t192-s0304-c00",
+              "pages": [
+                98
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.763225,
+              "chunk_id": "medicare-t192-s0305-c01",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.752139,
+              "chunk_id": "medicare-t192-s0305-c03",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.744147,
+              "chunk_id": "medicare-t192-s0305-c00",
+              "pages": [
+                99
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q12",
+          "category": "plan_rules",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.823974,
+              "chunk_id": "medicare-t192-s0222-c00",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.815739,
+              "chunk_id": "medicare-t192-s0222-c03",
+              "pages": [
+                64,
+                65
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.799794,
+              "chunk_id": "medicare-t192-s0236-c00",
+              "pages": [
+                73
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.795871,
+              "chunk_id": "medicare-t192-s0216-c00",
+              "pages": [
+                62
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.79277,
+              "chunk_id": "medicare-t192-s0214-c01",
+              "pages": [
+                61
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "strategy_id": "target_320",
+      "target_tokens": 320,
+      "chunk_count": 523,
+      "mean_chunk_tokens": 127.1586998087954,
+      "aggregate": {
+        "precision_at_1": 0.3333333333333333,
+        "precision_at_3": 0.3333333333333333,
+        "precision_at_5": 0.21666666666666667,
+        "recall_at_1": 0.2847222222222222,
+        "recall_at_3": 0.7698412698412699,
+        "recall_at_5": 0.8531746031746031,
+        "group_recall_at_5": 0.8444444444444444,
+        "mrr_at_5": 0.5902777777777778,
+        "ndcg_at_5": 0.6321982856685006
+      },
+      "per_query": [
+        {
+          "query_id": "q01",
+          "category": "eligibility",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.826072,
+              "chunk_id": "medicare-t320-s0229-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.82376,
+              "chunk_id": "medicare-t320-s0222-c00",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.815606,
+              "chunk_id": "medicare-t320-s0254-c00",
+              "pages": [
+                80
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.801914,
+              "chunk_id": "medicare-t320-s0230-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.800901,
+              "chunk_id": "medicare-t320-s0089-c00",
+              "pages": [
+                25
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q02",
+          "category": "calculation",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.886865,
+              "chunk_id": "medicare-t320-s0267-c00",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.863913,
+              "chunk_id": "medicare-t320-s0267-c02",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.848438,
+              "chunk_id": "medicare-t320-s0267-c04",
+              "pages": [
+                83,
+                85
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.800192,
+              "chunk_id": "medicare-t320-s0267-c03",
+              "pages": [
+                83,
+                84,
+                85
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.795188,
+              "chunk_id": "medicare-t320-s0267-c01",
+              "pages": [
+                83,
+                84
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q03",
+          "category": "multi_evidence",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 0.4166666666666667,
+            "precision_at_3": 0.6666666666666666,
+            "recall_at_3": 0.6666666666666666,
+            "precision_at_5": 0.4,
+            "recall_at_5": 0.6666666666666666,
+            "group_recall_at_5": 0.8,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 0.7039180890341347
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.880321,
+              "chunk_id": "medicare-t320-s0305-c00",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.840519,
+              "chunk_id": "medicare-t320-s0306-c00",
+              "pages": [
+                100
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.831764,
+              "chunk_id": "medicare-t320-s0305-c01",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.795127,
+              "chunk_id": "medicare-t320-s0309-c00",
+              "pages": [
+                100,
+                101
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.783245,
+              "chunk_id": "medicare-t320-s0304-c00",
+              "pages": [
+                98,
+                99
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q04",
+          "category": "enrollment",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.0,
+            "recall_at_3": 0.0,
+            "precision_at_5": 0.0,
+            "recall_at_5": 0.0,
+            "group_recall_at_5": 0.0,
+            "mrr_at_5": 0.0,
+            "ndcg_at_5": 0.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.811361,
+              "chunk_id": "medicare-t320-s0230-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.802957,
+              "chunk_id": "medicare-t320-s0072-c00",
+              "pages": [
+                18
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.800808,
+              "chunk_id": "medicare-t320-s0254-c00",
+              "pages": [
+                80
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.798936,
+              "chunk_id": "medicare-t320-s0232-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.795665,
+              "chunk_id": "medicare-t320-s0055-c00",
+              "pages": [
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q05",
+          "category": "enrollment",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.819724,
+              "chunk_id": "medicare-t320-s0072-c00",
+              "pages": [
+                18
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.81892,
+              "chunk_id": "medicare-t320-s0071-c00",
+              "pages": [
+                18
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.818534,
+              "chunk_id": "medicare-t320-s0230-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.791232,
+              "chunk_id": "medicare-t320-s0057-c00",
+              "pages": [
+                13
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.789535,
+              "chunk_id": "medicare-t320-s0069-c00",
+              "pages": [
+                17
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q06",
+          "category": "coverage",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.869404,
+              "chunk_id": "medicare-t320-s0101-c00",
+              "pages": [
+                29
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.817655,
+              "chunk_id": "medicare-t320-s0199-c00",
+              "pages": [
+                55
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.790832,
+              "chunk_id": "medicare-t320-s0088-c00",
+              "pages": [
+                25
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.775507,
+              "chunk_id": "medicare-t320-s0061-c01",
+              "pages": [
+                15
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.773884,
+              "chunk_id": "medicare-t320-s0053-c00",
+              "pages": [
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q07",
+          "category": "coverage",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.6666666666666666,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.5,
+            "ndcg_at_5": 0.6934264036172708
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.895831,
+              "chunk_id": "medicare-t320-s0042-c00",
+              "pages": [
+                9
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.876015,
+              "chunk_id": "medicare-t320-s0250-c01",
+              "pages": [
+                79
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.85094,
+              "chunk_id": "medicare-t320-s0250-c00",
+              "pages": [
+                79
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.839859,
+              "chunk_id": "medicare-t320-s0222-c01",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.826138,
+              "chunk_id": "medicare-t320-s0007-c04",
+              "pages": [
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q08",
+          "category": "multi_evidence",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 0.5714285714285714,
+            "precision_at_5": 0.2,
+            "recall_at_5": 0.5714285714285714,
+            "group_recall_at_5": 0.3333333333333333,
+            "mrr_at_5": 0.3333333333333333,
+            "ndcg_at_5": 0.23463936301137822
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.874368,
+              "chunk_id": "medicare-t320-s0229-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.859156,
+              "chunk_id": "medicare-t320-s0252-c00",
+              "pages": [
+                80
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.848446,
+              "chunk_id": "medicare-t320-s0232-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.835595,
+              "chunk_id": "medicare-t320-s0222-c00",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.824312,
+              "chunk_id": "medicare-t320-s0233-c00",
+              "pages": [
+                72
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q09",
+          "category": "coverage_rules",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.854962,
+              "chunk_id": "medicare-t320-s0247-c00",
+              "pages": [
+                78
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.846251,
+              "chunk_id": "medicare-t320-s0223-c00",
+              "pages": [
+                65
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.821288,
+              "chunk_id": "medicare-t320-s0222-c02",
+              "pages": [
+                64,
+                65
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.820684,
+              "chunk_id": "medicare-t320-s0248-c00",
+              "pages": [
+                78
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.817672,
+              "chunk_id": "medicare-t320-s0236-c00",
+              "pages": [
+                73
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q10",
+          "category": "prevention",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.870127,
+              "chunk_id": "medicare-t320-s0267-c00",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.828629,
+              "chunk_id": "medicare-t320-s0267-c01",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.818898,
+              "chunk_id": "medicare-t320-s0267-c04",
+              "pages": [
+                83,
+                85
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.810124,
+              "chunk_id": "medicare-t320-s0267-c02",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.803813,
+              "chunk_id": "medicare-t320-s0057-c00",
+              "pages": [
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q11",
+          "category": "appeals",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.791245,
+              "chunk_id": "medicare-t320-s0306-c00",
+              "pages": [
+                100
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.772673,
+              "chunk_id": "medicare-t320-s0304-c00",
+              "pages": [
+                98,
+                99
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.754739,
+              "chunk_id": "medicare-t320-s0305-c00",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.738174,
+              "chunk_id": "medicare-t320-s0309-c00",
+              "pages": [
+                100,
+                101
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.736592,
+              "chunk_id": "medicare-t320-s0305-c01",
+              "pages": [
+                99
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q12",
+          "category": "plan_rules",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.0,
+            "recall_at_3": 0.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.25,
+            "ndcg_at_5": 0.43067655807339306
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.815739,
+              "chunk_id": "medicare-t320-s0222-c02",
+              "pages": [
+                64,
+                65
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.800307,
+              "chunk_id": "medicare-t320-s0216-c00",
+              "pages": [
+                62
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.799794,
+              "chunk_id": "medicare-t320-s0236-c00",
+              "pages": [
+                73
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.791217,
+              "chunk_id": "medicare-t320-s0222-c00",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.789361,
+              "chunk_id": "medicare-t320-s0229-c00",
+              "pages": [
+                71
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "strategy_id": "target_416",
+      "target_tokens": 416,
+      "chunk_count": 481,
+      "mean_chunk_tokens": 137.37422037422039,
+      "aggregate": {
+        "precision_at_1": 0.5833333333333334,
+        "precision_at_3": 0.3055555555555555,
+        "precision_at_5": 0.2,
+        "recall_at_1": 0.5416666666666666,
+        "recall_at_3": 0.7976190476190477,
+        "recall_at_5": 0.8809523809523809,
+        "group_recall_at_5": 0.8611111111111112,
+        "mrr_at_5": 0.7152777777777778,
+        "ndcg_at_5": 0.7372413514479895
+      },
+      "per_query": [
+        {
+          "query_id": "q01",
+          "category": "eligibility",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.826454,
+              "chunk_id": "medicare-t416-s0222-c00",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.826072,
+              "chunk_id": "medicare-t416-s0229-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.815606,
+              "chunk_id": "medicare-t416-s0254-c00",
+              "pages": [
+                80
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.801914,
+              "chunk_id": "medicare-t416-s0230-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.800901,
+              "chunk_id": "medicare-t416-s0089-c00",
+              "pages": [
+                25
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q02",
+          "category": "calculation",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.860586,
+              "chunk_id": "medicare-t416-s0267-c01",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.85372,
+              "chunk_id": "medicare-t416-s0267-c00",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.831157,
+              "chunk_id": "medicare-t416-s0267-c02",
+              "pages": [
+                83,
+                84,
+                85
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.772819,
+              "chunk_id": "medicare-t416-s0085-c00",
+              "pages": [
+                23
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.768454,
+              "chunk_id": "medicare-t416-s0057-c00",
+              "pages": [
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q03",
+          "category": "multi_evidence",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 0.5,
+            "precision_at_3": 0.6666666666666666,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.4,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 0.9197207891481876
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.866907,
+              "chunk_id": "medicare-t416-s0305-c00",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.840519,
+              "chunk_id": "medicare-t416-s0306-c00",
+              "pages": [
+                100
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.829141,
+              "chunk_id": "medicare-t416-s0305-c01",
+              "pages": [
+                99,
+                100
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.797619,
+              "chunk_id": "medicare-t416-s0309-c00",
+              "pages": [
+                100,
+                101
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.783245,
+              "chunk_id": "medicare-t416-s0304-c00",
+              "pages": [
+                98,
+                99
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q04",
+          "category": "enrollment",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.0,
+            "recall_at_3": 0.0,
+            "precision_at_5": 0.0,
+            "recall_at_5": 0.0,
+            "group_recall_at_5": 0.0,
+            "mrr_at_5": 0.0,
+            "ndcg_at_5": 0.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.811361,
+              "chunk_id": "medicare-t416-s0230-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.802957,
+              "chunk_id": "medicare-t416-s0072-c00",
+              "pages": [
+                18
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.800808,
+              "chunk_id": "medicare-t416-s0254-c00",
+              "pages": [
+                80
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.798936,
+              "chunk_id": "medicare-t416-s0232-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.795666,
+              "chunk_id": "medicare-t416-s0055-c00",
+              "pages": [
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q05",
+          "category": "enrollment",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.819723,
+              "chunk_id": "medicare-t416-s0072-c00",
+              "pages": [
+                18
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.81892,
+              "chunk_id": "medicare-t416-s0071-c00",
+              "pages": [
+                18
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.818534,
+              "chunk_id": "medicare-t416-s0230-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.791232,
+              "chunk_id": "medicare-t416-s0057-c00",
+              "pages": [
+                13
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.789535,
+              "chunk_id": "medicare-t416-s0069-c00",
+              "pages": [
+                17
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q06",
+          "category": "coverage",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.869404,
+              "chunk_id": "medicare-t416-s0101-c00",
+              "pages": [
+                29
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.817655,
+              "chunk_id": "medicare-t416-s0199-c00",
+              "pages": [
+                55
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.790832,
+              "chunk_id": "medicare-t416-s0088-c00",
+              "pages": [
+                25
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.773884,
+              "chunk_id": "medicare-t416-s0053-c00",
+              "pages": [
+                12
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.768666,
+              "chunk_id": "medicare-t416-s0090-c00",
+              "pages": [
+                25
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q07",
+          "category": "coverage",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.895831,
+              "chunk_id": "medicare-t416-s0042-c00",
+              "pages": [
+                9
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.859643,
+              "chunk_id": "medicare-t416-s0250-c00",
+              "pages": [
+                79
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.831849,
+              "chunk_id": "medicare-t416-s0250-c01",
+              "pages": [
+                79
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.819288,
+              "chunk_id": "medicare-t416-s0277-c00",
+              "pages": [
+                88
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.810413,
+              "chunk_id": "medicare-t416-s0007-c03",
+              "pages": [
+                3
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q08",
+          "category": "multi_evidence",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 0.5714285714285714,
+            "precision_at_5": 0.2,
+            "recall_at_5": 0.5714285714285714,
+            "group_recall_at_5": 0.3333333333333333,
+            "mrr_at_5": 0.3333333333333333,
+            "ndcg_at_5": 0.23463936301137822
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.874368,
+              "chunk_id": "medicare-t416-s0229-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.859156,
+              "chunk_id": "medicare-t416-s0252-c00",
+              "pages": [
+                80
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.848446,
+              "chunk_id": "medicare-t416-s0232-c00",
+              "pages": [
+                71
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.836682,
+              "chunk_id": "medicare-t416-s0222-c00",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.824311,
+              "chunk_id": "medicare-t416-s0233-c00",
+              "pages": [
+                72
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q09",
+          "category": "coverage_rules",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.5,
+            "ndcg_at_5": 0.6309297535714575
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.854962,
+              "chunk_id": "medicare-t416-s0247-c00",
+              "pages": [
+                78
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.854002,
+              "chunk_id": "medicare-t416-s0223-c00",
+              "pages": [
+                65
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.820684,
+              "chunk_id": "medicare-t416-s0248-c00",
+              "pages": [
+                78
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.817672,
+              "chunk_id": "medicare-t416-s0236-c00",
+              "pages": [
+                73
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.817004,
+              "chunk_id": "medicare-t416-s0054-c00",
+              "pages": [
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q10",
+          "category": "prevention",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.863064,
+              "chunk_id": "medicare-t416-s0267-c00",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.812863,
+              "chunk_id": "medicare-t416-s0267-c01",
+              "pages": [
+                83,
+                84
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.803813,
+              "chunk_id": "medicare-t416-s0057-c00",
+              "pages": [
+                13
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.788872,
+              "chunk_id": "medicare-t416-s0267-c02",
+              "pages": [
+                83,
+                84,
+                85
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.784246,
+              "chunk_id": "medicare-t416-s0085-c00",
+              "pages": [
+                23
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q11",
+          "category": "appeals",
+          "metrics": {
+            "precision_at_1": 1.0,
+            "recall_at_1": 1.0,
+            "precision_at_3": 0.3333333333333333,
+            "recall_at_3": 1.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 1.0,
+            "ndcg_at_5": 1.0
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.791245,
+              "chunk_id": "medicare-t416-s0306-c00",
+              "pages": [
+                100
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.772673,
+              "chunk_id": "medicare-t416-s0304-c00",
+              "pages": [
+                98,
+                99
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.753824,
+              "chunk_id": "medicare-t416-s0305-c01",
+              "pages": [
+                99,
+                100
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.744997,
+              "chunk_id": "medicare-t416-s0305-c00",
+              "pages": [
+                99
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.741201,
+              "chunk_id": "medicare-t416-s0309-c00",
+              "pages": [
+                100,
+                101
+              ]
+            }
+          ]
+        },
+        {
+          "query_id": "q12",
+          "category": "plan_rules",
+          "metrics": {
+            "precision_at_1": 0.0,
+            "recall_at_1": 0.0,
+            "precision_at_3": 0.0,
+            "recall_at_3": 0.0,
+            "precision_at_5": 0.2,
+            "recall_at_5": 1.0,
+            "group_recall_at_5": 1.0,
+            "mrr_at_5": 0.25,
+            "ndcg_at_5": 0.43067655807339306
+          },
+          "top_hits": [
+            {
+              "rank": 1,
+              "score": 0.804889,
+              "chunk_id": "medicare-t416-s0216-c00",
+              "pages": [
+                62
+              ]
+            },
+            {
+              "rank": 2,
+              "score": 0.802989,
+              "chunk_id": "medicare-t416-s0222-c01",
+              "pages": [
+                64,
+                65
+              ]
+            },
+            {
+              "rank": 3,
+              "score": 0.799794,
+              "chunk_id": "medicare-t416-s0236-c00",
+              "pages": [
+                73
+              ]
+            },
+            {
+              "rank": 4,
+              "score": 0.791979,
+              "chunk_id": "medicare-t416-s0222-c00",
+              "pages": [
+                64
+              ]
+            },
+            {
+              "rank": 5,
+              "score": 0.789361,
+              "chunk_id": "medicare-t416-s0229-c00",
+              "pages": [
+                71
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "selected_strategy": {
+    "strategy_id": "target_416",
+    "target_tokens": 416
+  }
+}
