@@ -2,11 +2,17 @@ from __future__ import annotations
 
 import json
 from collections.abc import Sequence
-from math import log2
+from itertools import pairwise
+from math import isfinite, log2, nextafter
 from pathlib import Path
 
 from app.models.document import DocumentChunk
-from app.models.evaluation import GoldenQuery
+from app.models.evaluation import (
+    GoldenQuery,
+    NegativeQuery,
+    ThresholdMetrics,
+    ThresholdSelection,
+)
 from app.rag.vector_store import SearchHit
 
 
@@ -99,6 +105,101 @@ def load_golden_queries(
         )
 
     return tuple(queries)
+
+def load_negative_queries(
+    path: Path,
+) -> tuple[NegativeQuery, ...]:
+    """Load and validate no-answer threshold calibration queries."""
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Negative query file not found: {path}"
+        )
+
+    payload = json.loads(
+        path.read_text(
+            encoding="utf-8"
+        )
+    )
+
+    raw_queries = payload.get(
+        "queries"
+    )
+
+    if not isinstance(
+        raw_queries,
+        list,
+    ):
+        raise ValueError(
+            "Negative query file must contain a queries list."
+        )
+
+    queries: list[
+        NegativeQuery
+    ] = []
+
+    seen_ids: set[str] = set()
+
+    for item in raw_queries:
+        if not isinstance(
+            item,
+            dict,
+        ):
+            raise ValueError(
+                "Every negative query entry must be an object."
+            )
+
+        query_id = str(
+            item["query_id"]
+        ).strip()
+
+        query = str(
+            item["query"]
+        ).strip()
+
+        category = str(
+            item["category"]
+        ).strip()
+
+        if not query_id:
+            raise ValueError(
+                "query_id must not be empty."
+            )
+
+        if query_id in seen_ids:
+            raise ValueError(
+                f"Duplicate query_id: {query_id}"
+            )
+
+        if not query:
+            raise ValueError(
+                f"Query {query_id} must not be empty."
+            )
+
+        if not category:
+            raise ValueError(
+                f"Query {query_id} must contain a category."
+            )
+
+        queries.append(
+            NegativeQuery(
+                query_id=query_id,
+                query=query,
+                category=category,
+            )
+        )
+
+        seen_ids.add(
+            query_id
+        )
+
+    if not queries:
+        raise ValueError(
+            "Negative query dataset must not be empty."
+        )
+
+    return tuple(
+        queries
+    )
 
 def gold_source_units(
     query: GoldenQuery,
@@ -313,3 +414,211 @@ def _validate_k(k: int) -> None:
         raise ValueError(
             "k must be positive."
         )
+
+def evaluate_threshold(
+    positive_scores: Sequence[float],
+    negative_scores: Sequence[float],
+    threshold: float,
+) -> ThresholdMetrics:
+    """Evaluate one relevance threshold as a binary classifier."""
+    positives = _validated_scores(
+        positive_scores,
+        label="positive",
+    )
+
+    negatives = _validated_scores(
+        negative_scores,
+        label="negative",
+    )
+
+    if not isfinite(
+        threshold
+    ):
+        raise ValueError(
+            "Threshold must be finite."
+        )
+
+    true_positive = sum(
+        score >= threshold
+        for score in positives
+    )
+
+    false_negative = (
+        len(positives)
+        - true_positive
+    )
+
+    true_negative = sum(
+        score < threshold
+        for score in negatives
+    )
+
+    false_positive = (
+        len(negatives)
+        - true_negative
+    )
+
+    positive_recall = (
+        true_positive
+        / len(positives)
+    )
+
+    negative_specificity = (
+        true_negative
+        / len(negatives)
+    )
+
+    balanced_accuracy = (
+        positive_recall
+        + negative_specificity
+    ) / 2.0
+
+    return ThresholdMetrics(
+        threshold=float(
+            threshold
+        ),
+        true_positive=(
+            true_positive
+        ),
+        false_negative=(
+            false_negative
+        ),
+        true_negative=(
+            true_negative
+        ),
+        false_positive=(
+            false_positive
+        ),
+        positive_recall=(
+            positive_recall
+        ),
+        negative_specificity=(
+            negative_specificity
+        ),
+        balanced_accuracy=(
+            balanced_accuracy
+        ),
+    )
+
+
+def select_relevance_threshold(
+    positive_scores: Sequence[float],
+    negative_scores: Sequence[float],
+) -> ThresholdSelection:
+    """Select a threshold from measured positive and negative scores."""
+    positives = _validated_scores(
+        positive_scores,
+        label="positive",
+    )
+
+    negatives = _validated_scores(
+        negative_scores,
+        label="negative",
+    )
+
+    candidates = (
+        _candidate_thresholds(
+            (
+                *positives,
+                *negatives,
+            )
+        )
+    )
+
+    metrics = tuple(
+        evaluate_threshold(
+            positives,
+            negatives,
+            threshold,
+        )
+        for threshold in candidates
+    )
+
+    selected = max(
+        metrics,
+        key=lambda item: (
+            item.balanced_accuracy,
+            item.positive_recall,
+            item.negative_specificity,
+            -item.threshold,
+        ),
+    )
+
+    return ThresholdSelection(
+        selected=selected,
+        candidates_evaluated=(
+            len(metrics)
+        ),
+    )
+
+
+def _candidate_thresholds(
+    scores: Sequence[float],
+) -> tuple[float, ...]:
+    """Create deterministic thresholds from observed score boundaries."""
+    values = sorted(
+        set(
+            float(score)
+            for score in scores
+        )
+    )
+
+    if not values:
+        raise ValueError(
+            "At least one score is required."
+        )
+
+    candidates: list[
+        float
+    ] = [
+        values[0]
+    ]
+
+    for left, right in pairwise(
+        values
+    ):
+        candidates.append(
+            (
+                left
+                + right
+            )
+            / 2.0
+        )
+
+    candidates.append(
+        nextafter(
+            values[-1],
+            float("inf"),
+        )
+    )
+
+    return tuple(
+        candidates
+    )
+
+
+def _validated_scores(
+    scores: Sequence[float],
+    *,
+    label: str,
+) -> tuple[float, ...]:
+    """Validate a non-empty collection of retrieval scores."""
+    values = tuple(
+        float(score)
+        for score in scores
+    )
+
+    if not values:
+        raise ValueError(
+            f"{label.capitalize()} scores must not be empty."
+        )
+
+    if any(
+        not isfinite(score)
+        for score in values
+    ):
+        raise ValueError(
+            f"{label.capitalize()} scores must be finite."
+        )
+
+    return values

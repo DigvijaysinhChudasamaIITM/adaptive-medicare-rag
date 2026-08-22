@@ -1,0 +1,243 @@
+{
+  "version": 1,
+  "document_id": "medicare",
+  "document_sha256": "89ba6c75d91a2cb606fd53606366d1ae977d6e5c703335569814117dcce6add9",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "strategy_id": "target_416",
+  "target_tokens": 416,
+  "score_definition": "rank_1 normalized embedding inner-product similarity",
+  "positive_query_count": 12,
+  "negative_query_count": 6,
+  "threshold_selection_policy": [
+    "highest balanced accuracy",
+    "then highest positive recall",
+    "then highest negative specificity",
+    "then lower threshold"
+  ],
+  "candidates_evaluated": 19,
+  "selected_threshold": 0.7607258856296539,
+  "metrics": {
+    "threshold": 0.7607258856296539,
+    "true_positive": 12,
+    "false_negative": 0,
+    "true_negative": 6,
+    "false_positive": 0,
+    "positive_recall": 1.0,
+    "negative_specificity": 1.0,
+    "balanced_accuracy": 1.0
+  },
+  "positive_score_summary": {
+    "min": 0.7912449240684509,
+    "mean": 0.8448994855086008,
+    "max": 0.8958305716514587
+  },
+  "negative_score_summary": {
+    "min": 0.5185897946357727,
+    "mean": 0.6518655121326447,
+    "max": 0.7302068471908569
+  },
+  "positive_queries": [
+    {
+      "query_id": "q01",
+      "category": "eligibility",
+      "query": "What are the requirements to join a Medicare Advantage Plan?",
+      "top_score": 0.8264544010162354,
+      "top_chunk_id": "medicare-t416-s0222-c00",
+      "page_numbers": [
+        64
+      ],
+      "predicted_answerable": true
+    },
+    {
+      "query_id": "q02",
+      "category": "calculation",
+      "query": "How is the Medicare Part D late enrollment penalty calculated?",
+      "top_score": 0.8605855107307434,
+      "top_chunk_id": "medicare-t416-s0267-c01",
+      "page_numbers": [
+        83,
+        84
+      ],
+      "predicted_answerable": true
+    },
+    {
+      "query_id": "q03",
+      "category": "multi_evidence",
+      "query": "How do I file a Medicare appeal?",
+      "top_score": 0.8669072389602661,
+      "top_chunk_id": "medicare-t416-s0305-c00",
+      "page_numbers": [
+        99
+      ],
+      "predicted_answerable": true
+    },
+    {
+      "query_id": "q04",
+      "category": "enrollment",
+      "query": "When can I first sign up for Medicare?",
+      "top_score": 0.8113609552383423,
+      "top_chunk_id": "medicare-t416-s0230-c00",
+      "page_numbers": [
+        71
+      ],
+      "predicted_answerable": true
+    },
+    {
+      "query_id": "q05",
+      "category": "enrollment",
+      "query": "What happens if I miss my Medicare Initial Enrollment Period?",
+      "top_score": 0.8197234869003296,
+      "top_chunk_id": "medicare-t416-s0072-c00",
+      "page_numbers": [
+        18
+      ],
+      "predicted_answerable": true
+    },
+    {
+      "query_id": "q06",
+      "category": "coverage",
+      "query": "What does Medicare Part B generally cover?",
+      "top_score": 0.8694041967391968,
+      "top_chunk_id": "medicare-t416-s0101-c00",
+      "page_numbers": [
+        29
+      ],
+      "predicted_answerable": true
+    },
+    {
+      "query_id": "q07",
+      "category": "coverage",
+      "query": "What is Medicare drug coverage Part D?",
+      "top_score": 0.8958305716514587,
+      "top_chunk_id": "medicare-t416-s0042-c00",
+      "page_numbers": [
+        9
+      ],
+      "predicted_answerable": true
+    },
+    {
+      "query_id": "q08",
+      "category": "multi_evidence",
+      "query": "When can I join or switch a Medicare Advantage Plan?",
+      "top_score": 0.8743675947189331,
+      "top_chunk_id": "medicare-t416-s0229-c00",
+      "page_numbers": [
+        71
+      ],
+      "predicted_answerable": true
+    },
+    {
+      "query_id": "q09",
+      "category": "coverage_rules",
+      "query": "Can I have Medigap while I am in a Medicare Advantage Plan?",
+      "top_score": 0.8549615740776062,
+      "top_chunk_id": "medicare-t416-s0247-c00",
+      "page_numbers": [
+        78
+      ],
+      "predicted_answerable": true
+    },
+    {
+      "query_id": "q10",
+      "category": "prevention",
+      "query": "How can I avoid the Medicare Part D late enrollment penalty?",
+      "top_score": 0.8630639314651489,
+      "top_chunk_id": "medicare-t416-s0267-c00",
+      "page_numbers": [
+        83,
+        84
+      ],
+      "predicted_answerable": true
+    },
+    {
+      "query_id": "q11",
+      "category": "appeals",
+      "query": "Can someone represent me in a Medicare appeal?",
+      "top_score": 0.7912449240684509,
+      "top_chunk_id": "medicare-t416-s0306-c00",
+      "page_numbers": [
+        100
+      ],
+      "predicted_answerable": true
+    },
+    {
+      "query_id": "q12",
+      "category": "plan_rules",
+      "query": "What happens to Medicare Advantage coverage if a plan leaves Medicare?",
+      "top_score": 0.804889440536499,
+      "top_chunk_id": "medicare-t416-s0216-c00",
+      "page_numbers": [
+        62
+      ],
+      "predicted_answerable": true
+    }
+  ],
+  "negative_queries": [
+    {
+      "query_id": "n01",
+      "category": "unrelated",
+      "query": "What is the capital of France?",
+      "top_score": 0.5185897946357727,
+      "top_chunk_id": "medicare-t416-s0438-c00",
+      "page_numbers": [
+        125
+      ],
+      "predicted_answerable": false
+    },
+    {
+      "query_id": "n02",
+      "category": "unrelated",
+      "query": "How do I renew a U.S. passport?",
+      "top_score": 0.6152991056442261,
+      "top_chunk_id": "medicare-t416-s0339-c00",
+      "page_numbers": [
+        112
+      ],
+      "predicted_answerable": false
+    },
+    {
+      "query_id": "n03",
+      "category": "health_financial_adjacent",
+      "query": "What is the maximum HSA contribution limit for 2026?",
+      "top_score": 0.6697902679443359,
+      "top_chunk_id": "medicare-t416-s0078-c00",
+      "page_numbers": [
+        20
+      ],
+      "predicted_answerable": false
+    },
+    {
+      "query_id": "n04",
+      "category": "government_health_adjacent",
+      "query": "What is the Medicaid income limit in California for 2025?",
+      "top_score": 0.6616842746734619,
+      "top_chunk_id": "medicare-t416-s0084-c00",
+      "page_numbers": [
+        23
+      ],
+      "predicted_answerable": false
+    },
+    {
+      "query_id": "n05",
+      "category": "medicare_temporal_unsupported",
+      "query": "What is the exact 2026 Medicare Part B premium?",
+      "top_score": 0.7302068471908569,
+      "top_chunk_id": "medicare-t416-s0084-c00",
+      "page_numbers": [
+        23
+      ],
+      "predicted_answerable": false
+    },
+    {
+      "query_id": "n06",
+      "category": "medicare_plan_specific_unsupported",
+      "query": "What are the premiums for every Medicare Advantage plan in Texas?",
+      "top_score": 0.7156227827072144,
+      "top_chunk_id": "medicare-t416-s0214-c00",
+      "page_numbers": [
+        61
+      ],
+      "predicted_answerable": false
+    }
+  ]
+}

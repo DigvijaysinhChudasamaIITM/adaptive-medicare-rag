@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "description": "Out-of-document queries used only for no-answer threshold calibration.",
+  "queries": [
+    {
+      "query_id": "n01",
+      "query": "What is the capital of France?",
+      "category": "unrelated"
+    },
+    {
+      "query_id": "n02",
+      "query": "How do I renew a U.S. passport?",
+      "category": "unrelated"
+    },
+    {
+      "query_id": "n03",
+      "query": "What is the maximum HSA contribution limit for 2026?",
+      "category": "health_financial_adjacent"
+    },
+    {
+      "query_id": "n04",
+      "query": "What is the Medicaid income limit in California for 2025?",
+      "category": "government_health_adjacent"
+    },
+    {
+      "query_id": "n05",
+      "query": "What is the exact 2026 Medicare Part B premium?",
+      "category": "medicare_temporal_unsupported"
+    },
+    {
+      "query_id": "n06",
+      "query": "What are the premiums for every Medicare Advantage plan in Texas?",
+      "category": "medicare_plan_specific_unsupported"
+    }
+  ]
+}

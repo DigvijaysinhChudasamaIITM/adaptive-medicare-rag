@@ -698,54 +698,147 @@ Tests will verify that:
 No part of this decision should be presented as implemented until the generation, citation-validation, and confidence phases are completed.
 
 ---
-
 ## Decision 009 — Calibrate the no-answer threshold from evaluation data
 
-**Status:** In Progress — positive retrieval baseline/evaluation is complete; negative-query calibration and runtime gating are pending
+**Status:** Accepted — positive/negative calibration completed and deterministic runtime relevance gate implemented
 
 ### Decision
 
 Do not choose the retrieval relevance threshold as an arbitrary constant.
 
-Estimate a practical threshold using both:
+Calibrate the no-answer threshold empirically using retrieval-score
+distributions from:
 
-- answerable Medicare questions;
-- deliberately out-of-document negative questions.
+- manually verified answerable Medicare questions;
+- deliberately unsupported/out-of-document negative questions.
 
-### Completed Prerequisites
+The runtime relevance score is the rank-1 similarity returned by the selected
+FAISS index.
 
-The selected production retrieval strategy is now available and has been measured on manually verified positive queries.
+Because the system uses L2-normalized query and document embeddings with
+FAISS `IndexFlatIP`, this score is a normalized inner-product similarity that
+behaves as cosine similarity.
 
-The system therefore has:
+The relevance threshold is therefore an evidence/retrieval gate, not a
+probability that an answer is factually correct.
 
-- a fixed selected retrieval strategy (`target_416`);
-- normalized BGE query/document embeddings;
-- exact FAISS similarity scores;
-- a manually verified positive query set;
-- persisted retrieval evaluation results.
+### Calibration Dataset
 
-These prerequisites are sufficient to begin score-distribution analysis.
+Calibration uses:
 
-### Remaining Work
+- 12 manually verified answerable Medicare questions;
+- 6 deliberately unsupported negative questions.
 
-Before this decision can be marked Accepted:
+The negative set intentionally includes multiple difficulty levels:
 
-- create deliberately out-of-document negative queries;
-- retrieve positives and negatives against the selected production index;
-- compare their score distributions;
-- define and document the score used for gating;
-- select a practical threshold from measured data;
-- implement deterministic runtime no-answer behavior;
-- verify that below-threshold requests do not invoke the LLM;
-- test the threshold on representative answerable and unanswerable queries.
+- clearly unrelated questions;
+- health/financially adjacent questions;
+- government-health adjacent questions;
+- Medicare-related but temporally unsupported questions;
+- Medicare-related but plan-specific questions that cannot be answered from
+  the supplied handbook.
 
-### Rationale
+Negative calibration queries are stored separately from the positive retrieval
+benchmark and do not participate in chunk-strategy selection.
 
-The system should abstain when evidence is insufficient and should avoid invoking the LLM with irrelevant context.
+### Threshold Selection
 
-### Important Interpretation
+For every calibration query, the selected production retriever returns the
+rank-1 normalized embedding similarity.
 
-The future `confidence_score` will be documented as an evidence-strength heuristic, not as a calibrated probability that the generated answer is correct.
+Candidate thresholds are generated deterministically from boundaries between
+the observed positive and negative scores.
+
+Each candidate is evaluated as a binary answerability classifier using:
+
+- positive recall/sensitivity;
+- negative specificity;
+- balanced accuracy.
+
+The deterministic selection hierarchy is:
+
+1. highest balanced accuracy;
+2. highest positive recall;
+3. highest negative specificity;
+4. lower threshold as the final tie-breaker.
+
+This avoids selecting a threshold from intuition or a manually chosen constant.
+
+### Measured Score Distribution
+
+Using the empirically selected `target_416` retrieval strategy:
+
+| Score group | Minimum | Mean | Maximum |
+| --- | ---: | ---: | ---: |
+| Answerable queries | 0.7912 | 0.8449 | 0.8958 |
+| Unsupported queries | 0.5186 | 0.6519 | 0.7302 |
+
+The hardest observed negative query was:
+
+`What is the exact 2026 Medicare Part B premium?`
+
+with a rank-1 similarity of approximately:
+
+`0.7302`
+
+The lowest-scoring positive query had a rank-1 similarity of approximately:
+
+`0.7912`
+
+The observed calibration samples therefore contained a separation between the
+highest negative score and lowest positive score.
+
+### Selected Threshold
+
+The implemented calibration logic selected:
+
+`0.7607258856296539`
+
+For readability, documentation may display this as:
+
+`0.760726`
+
+On the 18-query calibration set this threshold produced:
+
+- true positives: 12;
+- false negatives: 0;
+- true negatives: 6;
+- false positives: 0;
+- positive recall: `1.0000`;
+- negative specificity: `1.0000`;
+- balanced accuracy: `1.0000`.
+
+These values describe performance on the small calibration set only.
+
+They must not be interpreted as a statistically calibrated estimate of
+production no-answer accuracy.
+
+A separate holdout sanity check remains planned and will not be used to
+reselect the chunking strategy or retroactively optimize this calibration set.
+
+### Runtime Gate
+
+Runtime relevance gating is implemented separately from semantic retrieval.
+
+Retrieval remains responsible for:
+
+- validating and embedding the query;
+- searching the selected FAISS index;
+- returning ranked `SearchHit` objects.
+
+The relevance gate receives those hits and applies the calibrated threshold.
+
+Runtime behavior is:
+
+```text
+no retrieval hits
+    -> reject / no-answer
+
+rank-1 score < threshold
+    -> reject / no-answer
+
+rank-1 score >= threshold
+    -> evidence is sufficiently relevant to continue
 
 ---
 
@@ -874,6 +967,27 @@ At the end of the current Phase 4 work:
 - the selected production index can retrieve known Medicare evidence successfully.
 
 These facts are supported by the current implementation and measured artifacts. They may be used in later README/documentation after final end-to-end verification.
+
+---
+# Verified Phase 5A Snapshot
+
+At completion of no-answer calibration:
+
+- 12 answerable queries and 6 deliberately unsupported queries were measured;
+- positive rank-1 scores ranged from approximately `0.7912` to `0.8958`;
+- negative rank-1 scores ranged from approximately `0.5186` to `0.7302`;
+- deterministic calibration selected threshold `0.760726`;
+- positive recall on the calibration set was `1.0000`;
+- negative specificity on the calibration set was `1.0000`;
+- balanced accuracy on the calibration set was `1.0000`;
+- clearly unrelated and hard Medicare-adjacent unsupported smoke-test queries
+  were rejected;
+- an answerable Medicare smoke-test query was accepted;
+- runtime relevance gating remains separate from semantic retrieval.
+
+These are calibration-set results and are not claimed as an independent estimate
+of production performance.
+
 
 ---
 
