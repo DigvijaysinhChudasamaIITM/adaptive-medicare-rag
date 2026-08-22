@@ -41,3 +41,6 @@ artifacts/*_inspection.txt
 
 # Generated candidate chunk corpora
 artifacts/chunks/
+
+# Generated vector indexes
+artifacts/indexes/
