@@ -1522,8 +1522,343 @@ trusted backend evidence.
 End-to-end query orchestration remains a separate Phase 9 responsibility.
 
 ---
+## Decision 017 — Fail closed at startup and bypass generation for irrelevant queries
 
-# Current Implementation Status — Through Phase 8
+**Status:** Accepted — end-to-end RAG orchestration, startup compatibility enforcement, and public query API implemented and verified
+
+### Decision
+
+Expose the retrieval and generation pipeline through a single `POST /query`
+endpoint while preserving the trust boundaries established in earlier phases.
+
+Runtime orchestration follows:
+
+```text
+validated user query
+    ↓
+retrieve Top-K evidence
+    ↓
+calibrated relevance gate
+    ↓
+relevant?
+    ├── no
+    │    ↓
+    │ deterministic abstention
+    │ confidence_score = 0.0
+    │ sources = []
+    │ OpenRouter is not called
+    │
+    └── yes
+         ↓
+       final Top-K evidence
+         ↓
+       grounded OpenRouter generation
+         ↓
+       Pydantic generation validation
+         ↓
+       citation allow-list validation
+         ↓
+       trusted backend source enrichment
+         ↓
+       deterministic evidence confidence
+         ↓
+       GroundedAnswer
+```
+
+The retrieval pool and generation context remain distinct:
+
+```text
+TOP_K        = 10
+FINAL_TOP_K  = 4
+```
+
+The larger retrieval set remains available for relevance assessment and
+evidence-strength calculations, while only the bounded final evidence set is
+supplied to the generation model.
+
+### No-Answer Short-Circuit
+
+An unsupported query is a valid RAG outcome rather than an API failure.
+
+If the calibrated relevance gate rejects the retrieved evidence, the service
+returns:
+
+```json
+{
+  "answer": "I don't have enough information in the provided Medicare evidence to answer that question.",
+  "confidence_score": 0.0,
+  "sources": []
+}
+```
+
+The generation client is not invoked on this path.
+
+A dedicated orchestration test verifies that an irrelevant query produces
+exactly zero generator calls.
+
+This is the primary hallucination-control boundary for unsupported questions.
+
+The model-level abstention policy remains a secondary defensive layer for cases
+where retrieval passes the gate but the supplied evidence is still
+insufficient for generation.
+
+### Final-Evidence Citation Boundary
+
+Citation validation is performed against the final evidence supplied to the
+LLM rather than the complete initial retrieval pool.
+
+Therefore, a chunk retrieved in the broader Top-K set but omitted from the
+final generation context cannot be accepted as a model citation.
+
+This ensures that every accepted citation corresponds to evidence the model
+actually received.
+
+### Async Orchestration
+
+The public API is asynchronous.
+
+Embedding and FAISS retrieval remain synchronous operations, so the
+orchestration service executes retrieval through Starlette's thread-pool
+boundary rather than blocking the event loop directly.
+
+OpenRouter generation remains asynchronous.
+
+### Startup Compatibility Enforcement
+
+The previously implemented artifact compatibility validator is now executed
+during the FastAPI application lifespan before the runtime RAG service becomes
+available.
+
+Startup validates the persisted retrieval system using:
+
+```text
+data/medicare.pdf
+artifacts/manifest.json
+artifacts/selected_strategy.json
+artifacts/relevance_calibration.json
+artifacts/indexes/selected/
+```
+
+Compatibility checks include:
+
+- PDF SHA-256;
+- PDF page count and byte size;
+- configured versus persisted embedding model;
+- embedding dimension;
+- selected chunk strategy;
+- target token size;
+- chunk count;
+- FAISS vector count;
+- FAISS dimension;
+- FAISS index type;
+- index fingerprint;
+- metadata fingerprint;
+- relevance threshold;
+- relevance-score definition;
+- persisted chunk identity constraints.
+
+An incompatible or missing runtime artifact fails application startup rather
+than allowing the API to serve with mismatched retrieval state.
+
+Compatibility validation occurs before the embedding model and retrieval
+runtime are constructed.
+
+### Runtime Resources
+
+FastAPI lifespan owns:
+
+```text
+validated CompatibilityResult
+Retriever
+RelevanceGate
+OpenRouterClient
+RAGService
+```
+
+The OpenRouter HTTP client is closed during application shutdown.
+
+The initialized RAG service is attached to application state and is required by
+the query route.
+
+### Public Query Contract
+
+The request schema contains only:
+
+```json
+{
+  "query": "user question"
+}
+```
+
+The query:
+
+- is whitespace-normalized;
+- must contain at least one character;
+- is limited to 2,000 characters;
+- rejects unexpected request fields.
+
+Invalid request bodies use FastAPI/Pydantic HTTP `422` responses.
+
+Successful grounded responses use:
+
+```text
+answer
+confidence_score
+sources
+```
+
+where source metadata remains backend-owned.
+
+### API Failure Policy
+
+Unsupported questions are returned as successful deterministic abstentions.
+
+Operational failures are separated from unsupported-content outcomes.
+
+The API maps known failures to safe responses without exposing API keys,
+provider payloads, or internal exception details.
+
+Current mappings include:
+
+```text
+retrieval failure
+    -> HTTP 503
+
+generation configuration failure
+    -> HTTP 503
+
+generation provider failure
+    -> HTTP 503
+
+malformed/unusable generation response
+    -> HTTP 502
+
+citation-integrity failure
+    -> HTTP 502
+
+grounded-response construction failure
+    -> HTTP 500
+```
+
+Request validation remains HTTP `422`.
+
+### Real End-to-End Verification
+
+The production application was exercised using the actual selected retrieval
+index, calibrated relevance gate, OpenRouter client, citation validation,
+source enrichment, and confidence layer.
+
+For:
+
+```text
+Does Medicare cover a yearly Wellness visit, and how often is it covered?
+```
+
+the API returned HTTP `200` with:
+
+```text
+answer:
+Yes, Medicare covers a yearly Wellness visit once every 12 months for
+individuals who have had Part B for longer than 12 months.
+
+validated source:
+medicare-t416-s0197-c00
+
+physical PDF pages:
+54–55
+
+retrieval score:
+0.8728764057159424
+
+retrieval rank:
+1
+
+evidence-strength confidence:
+0.7291
+```
+
+The source page numbers, source snippet, rank, and retrieval score were attached
+from trusted backend metadata rather than generated by the LLM.
+
+### Real Unsupported-Query Verification
+
+For:
+
+```text
+What is the capital of France?
+```
+
+the production API returned HTTP `200` with the deterministic insufficient-
+evidence response:
+
+```json
+{
+  "answer": "I don't have enough information in the provided Medicare evidence to answer that question.",
+  "confidence_score": 0.0,
+  "sources": []
+}
+```
+
+The orchestration test independently verifies that this rejection path performs
+zero generation calls.
+
+### Request-Validation Verification
+
+Production API smoke tests confirmed:
+
+```text
+empty query             -> HTTP 422
+whitespace-only query   -> HTTP 422
+query > 2,000 chars     -> HTTP 422
+unexpected JSON field   -> HTTP 422
+```
+
+### Implementation
+
+Implemented:
+
+- `app/models/api.py`
+- `app/rag/service.py`
+- `app/api/routes.py`
+- FastAPI lifespan and production runtime construction in `app/main.py`
+- `tests/test_rag_service.py`
+- `tests/test_api.py`
+- `tests/test_startup.py`
+- lifespan-aware health testing
+
+### Verification
+
+At completion of Phase 9:
+
+```text
+focused Phase 9 tests     17 passed
+full repository tests     148 passed
+Ruff                      passed
+pip check                 passed
+git diff --check          passed
+real grounded API call    HTTP 200
+real unsupported query    HTTP 200 deterministic abstention
+request edge cases        HTTP 422 as designed
+```
+
+The existing Starlette/TestClient `httpx` deprecation warning remains known and
+non-blocking. Dependencies were intentionally not destabilized solely to remove
+that warning.
+
+### Outcome
+
+The project now exposes an operational end-to-end Medicare RAG API with
+validated retrieval artifacts, calibrated no-answer gating, bounded generation
+context, grounded structured generation, semantic citation validation, trusted
+source metadata, deterministic evidence confidence, and safe error handling.
+
+The remaining work is submission readiness rather than core RAG architecture:
+README/runbook completion, fresh-clone verification, final repository/security
+review, and optional Docker only if time permits.
+
+---
+
+# Current Implementation Status — Through Phase 9
 
 | Area | Status |
 | --- | --- |
@@ -1551,14 +1886,15 @@ End-to-end query orchestration remains a separate Phase 9 responsibility.
 | Relevance-threshold calibration | **Complete — selected threshold `0.760726`** |
 | Runtime relevance/no-answer gate | **Complete — deterministic calibrated gate implemented and tested** |
 | Retrieval artifact compatibility validation | **Complete — manifest and artifact fingerprints implemented and tested** |
-| API startup/readiness compatibility enforcement | **Planned — to be wired during API orchestration** |
+| API startup/readiness compatibility enforcement | **Complete — manifest compatibility enforced during FastAPI lifespan startup** |
 | Reranker experiment/decision | **Complete — reranker not justified by measured holdout evidence** |
 | OpenRouter generation | **Complete — live primary model verified with fallback handling** |
 | Structured LLM output validation | **Complete — strict JSON schema plus Pydantic validation** |
 | Citation allow-list validation | **Complete — retrieved-evidence membership enforced fail-closed** |
 | Evidence-based confidence | **Complete — deterministic bounded evidence-strength heuristic** |
 | Final source snippet/page-reference formatting | **Complete — backend-derived trusted source metadata** |
-| `POST /query` end-to-end RAG endpoint | **Planned — not started** |
+| `POST /query` end-to-end RAG endpoint | **Complete — retrieval, gating, generation, citation validation, source enrichment, and confidence integrated** |
+| API no-answer generation bypass | **Complete — irrelevant retrieval returns deterministic abstention without calling OpenRouter** |
 | Source-document endpoint/link | **Planned if implemented stably** |
 | Final README/runbook | **Planned — not started** |
 | Docker | **Optional late-phase enhancement — not started** |
@@ -1742,16 +2078,55 @@ validation, and HTTP error mapping remain subsequent responsibilities.
 
 ---
 
+# Verified Phase 9 Snapshot
+
+At completion of end-to-end API orchestration:
+
+- FastAPI startup validates PDF, strategy, calibration, index, metadata, and
+  manifest compatibility before constructing the runtime RAG service;
+- incompatible artifacts fail application startup;
+- the production retriever continues to retrieve `TOP_K=10`;
+- only `FINAL_TOP_K=4` evidence chunks are exposed to generation;
+- synchronous retrieval is moved through the thread-pool boundary;
+- irrelevant retrieval is converted directly into deterministic abstention;
+- the irrelevant-query path does not invoke OpenRouter;
+- relevant evidence is sent through the grounded OpenRouter generation client;
+- accepted citations must belong to the exact final evidence supplied to the
+  LLM;
+- source pages, snippets, retrieval ranks, and retrieval scores remain
+  backend-owned;
+- evidence confidence remains deterministic and non-probabilistic;
+- provider, malformed-output, retrieval, citation, and response-construction
+  failures have explicit API mappings;
+- empty, whitespace-only, oversized, and extra-field query requests are
+  rejected with HTTP `422`;
+- a real production API request about the yearly Wellness visit returned
+  HTTP `200`, a grounded answer, physical PDF pages 54–55, and trusted source
+  metadata;
+- the live grounded response produced evidence-strength confidence `0.7291`;
+- a real query asking for the capital of France returned HTTP `200`,
+  deterministic abstention, confidence `0.0`, and no sources;
+- 17 focused Phase 9 tests passed;
+- the complete repository suite reached 148 passing tests.
+
+Core RAG implementation is now complete. Remaining work is final README/runbook,
+fresh-clone verification, repository/security review, submission polish, and
+optional Docker only if it can be added without destabilizing the required
+solution.
+
+---
+
 # Explicitly Not Yet Claimed as Complete
 
-To keep repository documentation honest, the following remain unfinished and must not be described as implemented:
+To keep repository documentation honest, the following remain unfinished and
+must not be described as implemented:
 
-- source PDF/index manifest compatibility enforcement at application startup;
-- final `POST /query` orchestration;
-- final API error contract;
-- final README;
+- final README/runbook;
+- final fresh-clone verification;
+- final repository, security, and submission review;
 - optional Docker image;
-- final fresh-clone verification.
+- a separate source-document endpoint/link only if it can be implemented
+  stably and is still judged useful.
 
 The broader engineering specification also proposes scalar semantic-coherence,
 boundary-quality, full length-efficiency, and composite candidate-scoring
@@ -1762,27 +2137,48 @@ evidence for the selected chunk target.
 
 # Next Planned Engineering Work
 
-The next critical-path work is retrieval hardening:
+The core RAG implementation is complete.
 
-1. add deliberately out-of-document negative queries;
-2. calibrate a no-answer threshold from positive/negative retrieval-score distributions;
-3. implement runtime abstention without an LLM call;
-4. add source PDF/index compatibility manifest validation;
-5. perform a small holdout sanity check;
-6. record the reranker decision based on measured need.
+The remaining critical path is submission readiness rather than additional
+retrieval or generation architecture.
 
-After retrieval hardening, the remaining critical path is:
+## Final Phase — Submission Readiness
 
+The remaining work is:
+
+1. complete the final README/runbook with installation, configuration, indexing,
+   evaluation, API usage, architecture, failure behavior, and limitations;
+2. verify all documented commands from a clean environment;
+3. perform a fresh-clone installation and runtime test;
+4. verify required retrieval artifacts are available or reproducibly generated;
+5. run the complete automated test suite;
+6. run one final grounded `POST /query` smoke test;
+7. run one final irrelevant-query/no-answer smoke test;
+8. audit the repository for secrets, temporary files, unnecessary artifacts,
+   and local-machine assumptions;
+9. inspect the final Git history and working-tree state;
+10. prepare the repository for submission.
+
+Docker remains optional and should be attempted only if all mandatory
+requirements are stable and sufficient time remains.
+
+No further changes are currently planned for:
+
+- document-adaptive chunking;
+- the selected `target_416` strategy;
+- BGE embeddings;
+- FAISS `IndexFlatIP`;
+- retrieval evaluation;
+- the calibrated relevance threshold;
+- the no-reranker decision;
 - grounded OpenRouter generation;
-- structured JSON/schema enforcement;
-- citation validation;
-- evidence-based confidence;
-- final FastAPI `/query` pipeline;
-- source-page linking;
-- edge/failure-path testing;
-- README and final documentation;
-- fresh-clone verification;
-- Docker only if stability/time permits.
+- citation-integrity enforcement;
+- trusted source enrichment;
+- evidence-strength confidence;
+- end-to-end `/query` orchestration.
+
+Those components are frozen unless final integration or fresh-clone testing
+reveals a concrete defect.
 
 ---
 
@@ -1800,13 +2196,40 @@ When multiple approaches are possible, prefer the smallest implementation that i
 
 Do not add technology merely to make the repository look more sophisticated.
 
-The strongest implemented differentiators through Phase 4 are:
+The strongest implemented differentiators of the completed core RAG system are:
 
-1. genuinely document-adaptive chunk candidate derivation;
-2. structure-aware semantic chunk construction;
-3. independently labeled retrieval evaluation;
-4. exact and reproducible FAISS retrieval;
-5. empirical chunk-strategy selection;
-6. deterministic production selection through a stable index alias.
+1. genuinely document-adaptive chunk candidate derivation rather than a
+   user-selected fixed chunk size;
+2. structure-aware semantic chunk construction with physical PDF page
+   provenance;
+3. independently labeled retrieval evaluation using Precision@K, Recall@K,
+   MRR, and NDCG;
+4. empirical chunk-strategy selection, with `target_416` selected from measured
+   candidate performance;
+5. exact and reproducible normalized BGE plus FAISS `IndexFlatIP` retrieval;
+6. calibrated retrieval-level no-answer gating using positive and deliberately
+   unsupported negative queries;
+7. independent holdout sanity evaluation separated from strategy and threshold
+   selection;
+8. an evidence-based decision not to add a reranker where measured results did
+   not justify the additional complexity;
+9. retrieval-artifact compatibility enforcement using document, embedding,
+   chunking, index, metadata, and relevance fingerprints;
+10. grounded OpenRouter generation with strict structured output, Pydantic
+    validation, bounded retries, fallback handling, and an explicit
+    prompt-injection trust boundary;
+11. semantic citation allow-list enforcement against the exact evidence
+    supplied to the model;
+12. backend-controlled source pages, snippets, retrieval scores, and ranks;
+13. deterministic evidence-strength confidence that is explicitly not presented
+    as a calibrated probability of factual correctness;
+14. end-to-end FastAPI orchestration with deterministic no-answer short-
+    circuiting that bypasses generation for irrelevant queries;
+15. fail-closed application startup when persisted retrieval artifacts are
+    incompatible.
 
-The next differentiators to complete are strong no-answer behavior, backend-controlled source integrity, evidence-derived confidence, and resilient structured LLM integration.
+The core RAG architecture is frozen unless final reproducibility testing reveals
+a concrete defect. Remaining work is submission readiness: README/runbook
+completion, fresh-clone verification, final repository and security review, and
+optional Docker only if it can be added without destabilizing the mandatory
+solution.
