@@ -21,7 +21,7 @@ Latest validation:
 | Real unsupported query | HTTP 200 deterministic abstention |
 | Request validation edge cases | HTTP 422 as designed |
 
-The remaining work before submission is final clean-environment reproducibility and repository QA.
+Fresh-clone reproducibility and repository QA are complete. Only final submission verification remains.
 
 ## Assignment Coverage
 

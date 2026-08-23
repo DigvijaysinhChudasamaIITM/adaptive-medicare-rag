@@ -1335,7 +1335,7 @@ Acceptance:
 Build:
 
 - repository
-- Python 3.11 environment
+- Python 3.10 environment (verified on Python 3.10.1)
 - dependencies
 - configuration
 - `.env.example`
@@ -1656,7 +1656,7 @@ The earlier file already captured the assignment well. The following changes mak
 | Citation validation was required after generation. | Add explicit allowed-ID set, deduplication, bounded repair, and backend metadata mapping. | Makes fabricated citations impossible to expose if validation is correctly implemented. |
 | Confidence was evidence-based but formula remained vague. | Define candidate retrieval-derived components and require normalization, clamping, testing, and clear non-probabilistic interpretation. | Makes confidence explainable rather than cosmetic. |
 | OpenRouter primary/fallback variables existed. | Specify timeout, bounded retries, transient-error handling, tested primary/fallback path, and safe total-failure response. | Free/external LLM availability is not guaranteed; resilience must be explicit. |
-| Python version was unspecified. | Standardize on Python 3.11. | Reduces dependency/FAISS/PyTorch reproducibility problems. |
+| Python version was unspecified. | Standardize on Python 3.10; verified on Python 3.10.1. | Reduces dependency/FAISS/PyTorch reproducibility problems. |
 | Token counting method was unspecified. | Use the embedding model tokenizer or a documented equivalent. | Avoids calling whitespace word counts “tokens.” |
 | FAISS was recommended generically. | Start with normalized embeddings + FAISS `IndexFlatIP`. | Gives a precise, simple, exact-search baseline appropriate for one PDF. |
 | Reranking was an optional pipeline component. | Make reranking an explicit **experiment-gated** feature. | Prevents unnecessary dependencies and demonstrates evidence-based engineering trade-offs. |

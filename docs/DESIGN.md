@@ -1852,13 +1852,14 @@ validated retrieval artifacts, calibrated no-answer gating, bounded generation
 context, grounded structured generation, semantic citation validation, trusted
 source metadata, deterministic evidence confidence, and safe error handling.
 
-The remaining work is submission readiness rather than core RAG architecture:
-README/runbook completion, fresh-clone verification, final repository/security
-review, and optional Docker only if time permits.
+The mandatory implementation, README/runbook, clean-clone reproducibility
+verification, and repository/security review are complete. Only final
+submission verification remains. Docker is an optional packaging enhancement
+and is not required for the core solution.
 
 ---
 
-# Current Implementation Status — Through Phase 9
+# Current Implementation Status — Through Phase 10
 
 | Area | Status |
 | --- | --- |
@@ -1895,10 +1896,10 @@ review, and optional Docker only if time permits.
 | Final source snippet/page-reference formatting | **Complete — backend-derived trusted source metadata** |
 | `POST /query` end-to-end RAG endpoint | **Complete — retrieval, gating, generation, citation validation, source enrichment, and confidence integrated** |
 | API no-answer generation bypass | **Complete — irrelevant retrieval returns deterministic abstention without calling OpenRouter** |
-| Source-document endpoint/link | **Planned if implemented stably** |
-| Final README/runbook | **Planned — not started** |
+| Source-document endpoint/link | **Not required — source traceability is already provided through chunk ID, physical PDF page(s), source snippet, retrieval rank, and retrieval score in every grounded response** |
+| Final README/runbook | **Complete — evaluator-facing setup, architecture, evaluation, API, failure semantics, limitations, and rebuild runbook verified** |
+| Fresh-clone verification | **Complete — clean GitHub clone, fresh Python 3.10.1 environment, dependency install, 148 tests, runtime startup, grounded query, abstention, and validation verified** |
 | Docker | **Optional late-phase enhancement — not started** |
-| Fresh-clone verification | **Final phase — not started** |
 
 ---
 
@@ -2118,67 +2119,113 @@ solution.
 
 # Explicitly Not Yet Claimed as Complete
 
-To keep repository documentation honest, the following remain unfinished and
-must not be described as implemented:
+The core implementation, evaluator-facing README/runbook, clean-clone
+reproducibility verification, and repository/security audit are complete.
 
-- final README/runbook;
-- final fresh-clone verification;
-- final repository, security, and submission review;
-- optional Docker image;
-- a separate source-document endpoint/link only if it can be implemented
-  stably and is still judged useful.
+The following are intentionally not claimed as implemented:
+
+- optional Docker packaging;
+- a separate source-document endpoint/link, because the required source
+  traceability is already provided through chunk IDs, physical PDF pages,
+  source snippets, retrieval ranks, and retrieval scores in the API response.
 
 The broader engineering specification also proposes scalar semantic-coherence,
 boundary-quality, full length-efficiency, and composite candidate-scoring
-diagnostics. Those are **not currently implemented** and are not used as
-evidence for the selected chunk target.
+diagnostics. Those are **not implemented** and are not used as evidence for
+the selected chunk target.
+
+No additional architecture is planned before submission unless the final
+verification gate reveals a concrete defect.
 
 ---
 
 # Next Planned Engineering Work
 
-The core RAG implementation is complete.
+The implementation and clean-environment reproducibility work are complete.
 
-The remaining critical path is submission readiness rather than additional
-retrieval or generation architecture.
+## Final Phase — Submission Verification
 
-## Final Phase — Submission Readiness
+Only final submission verification remains:
 
-The remaining work is:
+1. run Ruff across the repository;
+2. run the complete automated test suite;
+3. run dependency consistency checks;
+4. verify the final tracked diff and Git state;
+5. repeat the secret scan at HEAD;
+6. spot-check the README quick-start, dynamic-chunking explanation,
+   evaluation results, API examples, no-answer semantics, and limitations;
+7. verify `main` is synchronized with `origin/main`;
+8. commit and push the final documentation synchronization;
+9. submit the repository.
 
-1. complete the final README/runbook with installation, configuration, indexing,
-   evaluation, API usage, architecture, failure behavior, and limitations;
-2. verify all documented commands from a clean environment;
-3. perform a fresh-clone installation and runtime test;
-4. verify required retrieval artifacts are available or reproducibly generated;
-5. run the complete automated test suite;
-6. run one final grounded `POST /query` smoke test;
-7. run one final irrelevant-query/no-answer smoke test;
-8. audit the repository for secrets, temporary files, unnecessary artifacts,
-   and local-machine assumptions;
-9. inspect the final Git history and working-tree state;
-10. prepare the repository for submission.
+Docker remains optional and will not be added unless there is a compelling
+reason after every mandatory submission requirement is complete.
 
-Docker remains optional and should be attempted only if all mandatory
-requirements are stable and sufficient time remains.
-
-No further changes are currently planned for:
+No further changes are planned for:
 
 - document-adaptive chunking;
-- the selected `target_416` strategy;
+- `target_416`;
 - BGE embeddings;
 - FAISS `IndexFlatIP`;
 - retrieval evaluation;
-- the calibrated relevance threshold;
+- calibrated relevance gating;
+- holdout evaluation;
 - the no-reranker decision;
 - grounded OpenRouter generation;
 - citation-integrity enforcement;
 - trusted source enrichment;
 - evidence-strength confidence;
-- end-to-end `/query` orchestration.
+- end-to-end `/query` orchestration;
+- artifact compatibility enforcement.
 
-Those components are frozen unless final integration or fresh-clone testing
-reveals a concrete defect.
+Those components are frozen.
+
+---
+
+# Verified Phase 10 Snapshot
+
+Submission-readiness verification established that the repository works from a
+clean GitHub checkout rather than only from the development environment.
+
+Verified from a completely separate clone:
+
+- repository HEAD matched the pushed `main` branch;
+- the selected production FAISS index was present;
+- the selected index SHA-256 matched the runtime manifest;
+- selected metadata SHA-256 matched the runtime manifest;
+- a new Python 3.10.1 virtual environment was created;
+- dependencies installed only from the repository requirements files;
+- `python -m pip check` passed;
+- Ruff passed;
+- all 148 automated tests passed;
+- `.env.example` produced a usable ignored runtime configuration;
+- FastAPI started successfully using the documented Uvicorn command;
+- startup artifact compatibility validation passed;
+- `/health` returned HTTP 200;
+- a real Medicare Wellness query returned a grounded answer with trusted
+  source provenance;
+- the fresh-clone grounded response returned physical PDF pages 54–55,
+  retrieval rank 1, retrieval score `0.8728764057159424`, and
+  evidence-strength confidence `0.7291`;
+- an unsupported question returned deterministic HTTP 200 abstention with
+  confidence `0.0` and no sources;
+- an invalid whitespace-only request returned HTTP 422;
+- temporary runtime logs and `.env` remained ignored;
+- the fresh-clone working tree remained clean.
+
+Fresh-clone testing exposed and resolved two portability defects before
+submission:
+
+1. the original selected-metadata fingerprint had been calculated from Windows
+   CRLF working-tree bytes while Git checked out canonical LF bytes; the
+   manifest now fingerprints the canonical checkout representation;
+2. rebuild commands originally used direct script execution, which did not
+   reliably place the repository package root on Python's import path; the
+   documented rebuild workflow now uses `python -m scripts.<module>`.
+
+These corrections were verified through a second clean clone.
+
+The project was developed and clean-clone verified on Python 3.10.1.
 
 ---
 
@@ -2228,8 +2275,8 @@ The strongest implemented differentiators of the completed core RAG system are:
 15. fail-closed application startup when persisted retrieval artifacts are
     incompatible.
 
-The core RAG architecture is frozen unless final reproducibility testing reveals
-a concrete defect. Remaining work is submission readiness: README/runbook
-completion, fresh-clone verification, final repository and security review, and
-optional Docker only if it can be added without destabilizing the mandatory
-solution.
+The core RAG architecture is frozen. README/runbook completion, fresh-clone
+verification, and repository/security review are complete. Only the final
+submission verification and push remain. Docker is intentionally optional and
+will not be added unless it can provide clear value without destabilizing the
+mandatory solution.
