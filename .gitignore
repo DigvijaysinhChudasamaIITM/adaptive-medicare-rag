@@ -42,5 +42,10 @@ artifacts/*_inspection.txt
 # Generated candidate chunk corpora
 artifacts/chunks/
 
-# Generated vector indexes
-artifacts/indexes/
+# Generated candidate vector indexes.
+# Keep only the selected production index in Git so a fresh clone can run
+# the API without rebuilding every candidate strategy.
+artifacts/indexes/*
+!artifacts/indexes/selected/
+!artifacts/indexes/selected/index.faiss
+!artifacts/indexes/selected/metadata.json
