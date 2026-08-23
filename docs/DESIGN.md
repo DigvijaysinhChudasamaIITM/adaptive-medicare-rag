@@ -1319,7 +1319,211 @@ subsequent responsibilities.
 
 ---
 
-# Current Implementation Status — Through Phase 7
+## Decision 016 — Validate citations before trusted source enrichment
+
+**Status:** Accepted — semantic citation validation, backend source enrichment, and deterministic evidence-strength scoring implemented and verified
+
+### Decision
+
+Treat LLM-generated citation IDs as untrusted until every citation is verified
+against the retrieved evidence set supplied to generation.
+
+The model remains responsible only for:
+
+```text
+answer
+citation IDs
+```
+
+Trusted source metadata is constructed only after citation validation from
+backend-owned `SearchHit` and `DocumentChunk` data.
+
+### Citation Integrity Policy
+
+Citation validation follows a fail-closed policy:
+
+```text
+citation belongs to retrieved evidence
+    -> accept
+
+duplicate citation
+    -> preserve first occurrence only
+
+unknown or invented citation
+    -> reject the generated answer
+
+substantive answer with no citations
+    -> reject the generated answer
+
+explicit abstention with no citations
+    -> accept
+
+explicit abstention with citations
+    -> reject the generated answer
+```
+
+Unknown citations are not silently removed because doing so would hide a
+grounding failure.
+
+The validator also rejects duplicate chunk IDs in the retrieved evidence set,
+since citation identity must be unambiguous.
+
+### Trusted Source Enrichment
+
+After citation validation, the backend constructs one trusted source object per
+validated citation.
+
+The source object contains:
+
+```text
+chunk_id
+page_numbers
+page_start
+page_end
+page_reference
+snippet
+retrieval_score
+retrieval_rank
+```
+
+These values originate from retrieval metadata rather than model output.
+
+Physical PDF page provenance is preserved for multi-page chunks.
+
+Examples:
+
+```text
+PDF page 54
+PDF pages 54–55
+PDF pages 54, 56
+```
+
+### Snippet Policy
+
+Source snippets are derived deterministically from trusted chunk text.
+
+The implementation:
+
+- normalizes whitespace;
+- never asks the LLM to author or summarize a source snippet;
+- keeps short chunks intact;
+- bounds long snippets to a configured character limit;
+- prefers a nearby whitespace boundary when truncating;
+- appends an ellipsis when truncation occurs.
+
+The default maximum snippet length is `420` characters.
+
+### Evidence-Strength Confidence
+
+The API-facing `confidence_score` is a deterministic evidence-strength
+heuristic.
+
+It is explicitly **not** a calibrated probability that the generated answer
+is factually correct.
+
+The score uses only trusted retrieval and citation signals:
+
+```text
+35%  normalized absolute top retrieval similarity
+35%  normalized margin above the calibrated relevance threshold
+20%  mean normalized similarity of cited evidence
+10%  multi-source citation support
+```
+
+The result is bounded to `[0, 1]` and rounded to four decimal places.
+
+The threshold-margin component is normalized relative to the already-selected
+relevance threshold rather than treating raw cosine similarity as a factual
+probability.
+
+### Real-Data Verification
+
+Phase 8 was exercised against the selected production index using the query:
+
+```text
+Does Medicare cover a yearly Wellness visit, and how often is it covered?
+```
+
+Observed retrieval:
+
+```text
+rank 1   0.872876   medicare-t416-s0197-c00   PDF pages 54–55
+rank 2   0.850187   medicare-t416-s0197-c01   PDF pages 54–55
+rank 3   0.765858   medicare-t416-s0002-c00   PDF page 2
+rank 4   0.749427   medicare-t416-s0180-c00   PDF page 50
+rank 5   0.742592   medicare-t416-s0128-c00   PDF page 37
+```
+
+The calibrated relevance gate accepted the query:
+
+```text
+top score     0.8728764057159424
+threshold     0.7607258856296539
+relevant      true
+```
+
+Two citations were then validated against the actual retrieval result:
+
+```text
+medicare-t416-s0197-c00
+medicare-t416-s0197-c01
+```
+
+Trusted source enrichment correctly preserved:
+
+```text
+page_numbers       [54, 55]
+page_reference     PDF pages 54–55
+retrieval ranks    1 and 2
+retrieval scores   0.872876 and 0.850187
+```
+
+The resulting evidence-strength confidence score was:
+
+```text
+0.778
+```
+
+This value describes the strength of the retrieved and cited evidence under the
+documented heuristic. It must not be interpreted as a `77.8%` probability that
+the answer is factually correct.
+
+### Implementation
+
+Implemented:
+
+- `app/models/grounding.py`
+- `app/rag/citations.py`
+- `app/rag/confidence.py`
+- `tests/test_citations.py`
+- `tests/test_confidence.py`
+
+### Verification
+
+At Phase 8 completion:
+
+```text
+Phase 8 focused tests     23 passed
+full repository tests    132 passed
+Ruff                      passed
+pip check                 passed
+git diff --check          passed
+```
+
+### Outcome
+
+The generation model can no longer establish source trust merely by returning
+a syntactically valid citation ID.
+
+Citation membership must first pass the retrieved-evidence allow-list, after
+which all user-facing source metadata and confidence values are produced from
+trusted backend evidence.
+
+End-to-end query orchestration remains a separate Phase 9 responsibility.
+
+---
+
+# Current Implementation Status — Through Phase 8
 
 | Area | Status |
 | --- | --- |
@@ -1351,9 +1555,9 @@ subsequent responsibilities.
 | Reranker experiment/decision | **Complete — reranker not justified by measured holdout evidence** |
 | OpenRouter generation | **Complete — live primary model verified with fallback handling** |
 | Structured LLM output validation | **Complete — strict JSON schema plus Pydantic validation** |
-| Citation allow-list validation | **Planned — not started** |
-| Evidence-based confidence | **Planned — not started** |
-| Final source snippet/page-reference formatting | **Planned — not started** |
+| Citation allow-list validation | **Complete — retrieved-evidence membership enforced fail-closed** |
+| Evidence-based confidence | **Complete — deterministic bounded evidence-strength heuristic** |
+| Final source snippet/page-reference formatting | **Complete — backend-derived trusted source metadata** |
 | `POST /query` end-to-end RAG endpoint | **Planned — not started** |
 | Source-document endpoint/link | **Planned if implemented stably** |
 | Final README/runbook | **Planned — not started** |
@@ -1508,15 +1712,41 @@ claimed as complete.
 
 ---
 
+# Verified Phase 8 Snapshot
+
+At completion of citation integrity and source enrichment:
+
+- LLM citation IDs are treated as untrusted until membership in the retrieved
+  evidence set is verified;
+- invented or non-retrieved citation IDs fail closed;
+- duplicate model citations are deterministically collapsed to their first
+  occurrence;
+- a substantive answer without citations is rejected;
+- the exact configured abstention without citations remains valid;
+- abstention responses containing citations are rejected;
+- source page numbers, snippets, ranks, and retrieval scores are generated only
+  from trusted backend retrieval metadata;
+- multi-page PDF provenance is preserved;
+- source snippets are deterministic and bounded rather than LLM-generated;
+- `confidence_score` is deterministic and bounded to `[0, 1]`;
+- the confidence value is documented as evidence strength rather than a
+  calibrated factual probability;
+- a production-index Wellness query validated two real citations on physical
+  PDF pages 54–55;
+- that real-data example produced an evidence-strength score of `0.778`;
+- 23 focused Phase 8 tests passed;
+- the complete repository suite reached 132 passing tests.
+
+End-to-end relevance-gate short-circuiting, API orchestration, startup artifact
+validation, and HTTP error mapping remain subsequent responsibilities.
+
+---
+
 # Explicitly Not Yet Claimed as Complete
 
 To keep repository documentation honest, the following remain unfinished and must not be described as implemented:
 
 - source PDF/index manifest compatibility enforcement at application startup;
-- citation allow-list enforcement;
-- backend-generated source response objects;
-- relevant source snippets/page references in final API JSON;
-- evidence-derived confidence;
 - final `POST /query` orchestration;
 - final API error contract;
 - final README;
