@@ -1063,8 +1063,92 @@ The holdout results are recorded as an engineering sanity check and are not
 used to reselect the chunking strategy or retune the relevance threshold.
 
 ---
+## Decision 014 — Do not add a reranker to the current retrieval pipeline
 
-# Current Implementation Status — Through Phase 5C
+**Status:** Accepted — holdout evidence does not justify the additional model, latency, and dependency cost
+
+### Decision
+
+Do not add a cross-encoder reranker to the current production retrieval
+pipeline.
+
+The selected BGE embedding model and exact FAISS retrieval remain the retrieval
+mechanism used by the generation pipeline.
+
+### Evidence
+
+The independent five-query holdout produced:
+
+- Recall@5: `0.8000`;
+- Group Recall@5: `0.8000`;
+- MRR@5: `0.8000`;
+- binary NDCG@5: `0.8000`;
+- four of five queries recovered all frozen evidence at rank 1.
+
+The only strict-label miss was investigated separately.
+
+For that query, the chunk containing the exact frozen gold source units did
+not occur anywhere in the Top-20 retrieved candidates.
+
+A reranker applied to the intended Top-10 retrieval set therefore could not
+promote that exact frozen chunk because it was not present in the candidate
+pool.
+
+The rank-1 candidate for the same query nevertheless contained alternative,
+substantively valid evidence that could correctly answer the user's question.
+
+### Trade-off
+
+Adding a cross-encoder reranker would introduce:
+
+- another model dependency;
+- additional model loading;
+- additional inference latency;
+- additional memory use;
+- another runtime failure surface;
+- additional testing and packaging complexity.
+
+The current evaluation does not demonstrate a measurable retrieval-ranking
+problem that would justify these costs.
+
+### Reconsideration Criteria
+
+A reranker should be reconsidered if future evaluation shows that:
+
+- relevant evidence is consistently present in the initial Top-N candidate
+  pool but ranked below the final context cutoff;
+- reranking produces a measurable improvement in Recall, MRR, or NDCG;
+- the measured improvement justifies the added latency and operational
+  complexity.
+
+### Outcome
+
+The production retrieval path remains:
+
+```text
+user query
+    |
+    v
+BGE query embedding
+    |
+    v
+normalized vector
+    |
+    v
+FAISS IndexFlatIP Top-N retrieval
+    |
+    v
+calibrated relevance/no-answer gate
+    |
+    v
+final evidence selection
+```
+
+No cross-encoder reranking model is included.
+
+---
+
+# Current Implementation Status — Through Phase 6
 
 | Area | Status |
 | --- | --- |
@@ -1093,7 +1177,7 @@ used to reselect the chunking strategy or retune the relevance threshold.
 | Runtime relevance/no-answer gate | **Complete — deterministic calibrated gate implemented and tested** |
 | Retrieval artifact compatibility validation | **Complete — manifest and artifact fingerprints implemented and tested** |
 | API startup/readiness compatibility enforcement | **Planned — to be wired during API orchestration** |
-| Reranker experiment/decision | **Planned after baseline/holdout review** |
+| Reranker experiment/decision | **Complete — reranker not justified by measured holdout evidence** |
 | OpenRouter generation | **Planned — not started** |
 | Structured LLM output validation | **Planned — not started** |
 | Citation allow-list validation | **Planned — not started** |
@@ -1199,12 +1283,35 @@ powered estimate of retrieval accuracy.
 
 ---
 
+# Verified Phase 6 Snapshot
+
+At completion of the reranker decision:
+
+- the independent holdout had already been evaluated without changing the
+  selected retrieval configuration;
+- 4 of 5 holdout queries recovered all frozen evidence at rank 1;
+- the one strict-label miss was investigated with Top-20 retrieval;
+- its exact frozen gold chunk was absent from Top-20;
+- therefore a reranker over the intended Top-10 candidate set could not solve
+  the measured strict-label miss;
+- the same query already retrieved alternative substantively valid answer
+  evidence at rank 1;
+- no measured evidence currently justifies the latency, dependency, and
+  operational cost of a cross-encoder reranker.
+
+The production retrieval pipeline therefore remains BGE embeddings plus exact
+FAISS retrieval, followed by the calibrated relevance gate.
+
+A reranker may be reconsidered only if future evaluation shows a measurable
+ranking problem within the retrieved candidate pool.
+
+---
+
 # Explicitly Not Yet Claimed as Complete
 
 To keep repository documentation honest, the following remain unfinished and must not be described as implemented:
 
 - source PDF/index manifest compatibility enforcement at application startup;
-- reranker evaluation/decision;
 - OpenRouter LLM integration;
 - primary/fallback model handling;
 - grounded prompt and prompt-injection boundary tests;
