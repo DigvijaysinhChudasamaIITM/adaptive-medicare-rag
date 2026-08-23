@@ -968,8 +968,103 @@ vector_count         481
 relevance_threshold  0.7607258856296539
 
 ---
+## Decision 013 — Use an independent holdout as an engineering sanity check
 
-# Current Implementation Status — Through Phase 4
+**Status:** Accepted — five-query holdout evaluated after retrieval strategy and relevance threshold were locked
+
+### Decision
+
+Evaluate the already-selected production retrieval configuration on a small
+independent holdout set whose evidence labels are frozen before retrieval.
+
+The holdout must not be used to:
+
+- reselect the chunking strategy;
+- modify the selected target token size;
+- retune the relevance threshold;
+- retroactively change labels after observing retrieval results.
+
+The purpose is an engineering sanity check of generalization, not a
+statistically powered benchmark.
+
+### Holdout Construction
+
+Five answerable queries were selected from topics not used in the original
+12-query chunk-strategy selection benchmark:
+
+1. travel outside the U.S.;
+2. yearly Medicare Wellness visits;
+3. Qualified Medicare Beneficiary assistance;
+4. Medigap coverage;
+5. Original Medicare coverage exclusions.
+
+Gold source-unit labels were established through direct PDF/parser inspection
+before running retrieval.
+
+The frozen holdout is stored in:
+
+`evaluation/holdout_queries.json`
+
+### Locked Retrieval Configuration
+
+The holdout evaluated only:
+
+```text
+embedding model      BAAI/bge-small-en-v1.5
+chunk strategy       target_416
+target tokens        416
+FAISS index           IndexFlatIP
+retrieval cutoff      Top-5
+relevance threshold   0.7607258856296539
+```
+
+### Results
+
+The five-query holdout achieved:
+
+- Precision@1: `0.8000`;
+- Recall@1: `0.8000`;
+- Recall@3: `0.8000`;
+- Recall@5: `0.8000`;
+- Group Recall@5: `0.8000`;
+- MRR@5: `0.8000`;
+- binary NDCG@5: `0.8000`;
+- relevance-gate acceptance: `5/5`.
+
+Four of five queries recovered all frozen evidence at rank 1.
+
+The remaining query did not recover its specifically frozen evidence units
+within Top-5.
+
+### Holdout-Miss Diagnostic
+
+A diagnostic Top-20 retrieval confirmed that the exact frozen evidence chunk
+for the remaining query did not occur within the first 20 results.
+
+However, the rank-1 result contained alternative substantively valid evidence
+that could correctly answer the natural-language question.
+
+The frozen gold labels were intentionally left unchanged after evaluation to
+avoid test-set contamination.
+
+### Interpretation
+
+The strict holdout score remains `0.80`.
+
+The result demonstrates reasonable retrieval generalization while also
+showing a limitation of strict source-unit evaluation when multiple passages
+can validly answer the same question.
+
+### Outcome
+
+The selected `target_416` configuration remains unchanged.
+
+The holdout results are recorded as an engineering sanity check and are not
+used to reselect the chunking strategy or retune the relevance threshold.
+
+---
+
+# Current Implementation Status — Through Phase 5C
 
 | Area | Status |
 | --- | --- |
@@ -992,11 +1087,12 @@ relevance_threshold  0.7607258856296539
 | Empirical chunk-strategy selection | **Complete — `target_416` selected** |
 | Stable selected-index alias | **Complete — `artifacts/indexes/selected/`** |
 | Retrieval evaluation artifact | **Complete** |
-| Holdout sanity evaluation | **Planned — not yet implemented** |
-| Negative/no-answer query set | **Planned for next phase** |
-| Relevance-threshold calibration | **In Progress by Decision 009; implementation pending** |
-| Runtime no-answer gating | **Planned for next phase** |
-| Source PDF/index manifest compatibility validation | **Planned for retrieval-hardening phase** |
+| Independent holdout sanity evaluation | **Complete — 5 frozen queries, Recall@5/MRR@5/NDCG@5 = 0.80** |
+| Negative/no-answer calibration set | **Complete — 6 deliberately unsupported queries** |
+| Relevance-threshold calibration | **Complete — selected threshold `0.760726`** |
+| Runtime relevance/no-answer gate | **Complete — deterministic calibrated gate implemented and tested** |
+| Retrieval artifact compatibility validation | **Complete — manifest and artifact fingerprints implemented and tested** |
+| API startup/readiness compatibility enforcement | **Planned — to be wired during API orchestration** |
 | Reranker experiment/decision | **Planned after baseline/holdout review** |
 | OpenRouter generation | **Planned — not started** |
 | Structured LLM output validation | **Planned — not started** |
@@ -1076,6 +1172,30 @@ The compatibility manifest does not change retrieval ranking, chunk-strategy
 selection, or relevance calibration. It only ensures that persisted artifacts
 used together belong to the same verified retrieval configuration.
 
+---
+
+# Verified Phase 5C Snapshot
+
+At completion of the independent retrieval holdout:
+
+- 5 holdout queries were labeled before retrieval;
+- no holdout query participated in chunk-strategy selection;
+- no holdout query participated in relevance-threshold calibration;
+- the selected strategy remained `target_416`;
+- the target size remained `416` tokens;
+- the relevance threshold remained `0.7607258856296539`;
+- all 5 answerable holdout queries passed the relevance gate;
+- 4 of 5 recovered all frozen evidence at rank 1;
+- mean Recall@5 was `0.8000`;
+- mean Group Recall@5 was `0.8000`;
+- mean MRR@5 was `0.8000`;
+- mean binary NDCG@5 was `0.8000`;
+- the one strict-label miss was investigated without changing its frozen labels;
+- its exact frozen evidence did not occur in Top-20;
+- alternative substantively correct evidence occurred at rank 1.
+
+The holdout is an engineering sanity check rather than a statistically
+powered estimate of retrieval accuracy.
 
 ---
 
@@ -1083,9 +1203,6 @@ used together belong to the same verified retrieval configuration.
 
 To keep repository documentation honest, the following remain unfinished and must not be described as implemented:
 
-- negative-query threshold calibration;
-- runtime abstention/no-answer gating;
-- a separate holdout sanity set;
 - source PDF/index manifest compatibility enforcement at application startup;
 - reranker evaluation/decision;
 - OpenRouter LLM integration;

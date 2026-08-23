@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "description": "Independent answerable-query holdout set for engineering sanity evaluation of the already-selected production retrieval configuration.",
+  "policy": "Labels were frozen from direct source/PDF parser inspection before running retrieval. This holdout must not be used to reselect chunking strategy or retune the relevance threshold.",
+  "queries": [
+    {
+      "query_id": "h01",
+      "query": "Does Medicare cover health care while I am traveling outside the U.S.?",
+      "category": "travel_coverage",
+      "evidence_groups": [
+        [908],
+        [909]
+      ],
+      "gold_pages": [53]
+    },
+    {
+      "query_id": "h02",
+      "query": "Who can get a yearly Medicare Wellness visit, and how often is it covered?",
+      "category": "preventive_services",
+      "evidence_groups": [
+        [930]
+      ],
+      "gold_pages": [54]
+    },
+    {
+      "query_id": "h03",
+      "query": "For people with limited income and resources, what can the Qualified Medicare Beneficiary (QMB) Program help pay, and what charges are providers prohibited from billing?",
+      "category": "financial_assistance",
+      "evidence_groups": [
+        [1454],
+        [1455]
+      ],
+      "gold_pages": [91]
+    },
+    {
+      "query_id": "h04",
+      "query": "What does Medigap help pay for, and what does it generally not cover?",
+      "category": "medigap",
+      "evidence_groups": [
+        [1246],
+        [1247]
+      ],
+      "gold_pages": [75]
+    },
+    {
+      "query_id": "h05",
+      "query": "What are two examples of services that Original Medicare does not cover?",
+      "category": "coverage_exclusions",
+      "evidence_groups": [
+        [944],
+        [945]
+      ],
+      "gold_pages": [55]
+    }
+  ]
+}

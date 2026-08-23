@@ -1,0 +1,581 @@
+{
+  "version": 1,
+  "evaluation_type": "independent_holdout_sanity_check",
+  "policy": "The holdout is evaluated only after chunk-strategy selection and relevance-threshold calibration were locked. Results are not used to reselect the strategy or retune the threshold.",
+  "document_id": "medicare",
+  "document_sha256": "89ba6c75d91a2cb606fd53606366d1ae977d6e5c703335569814117dcce6add9",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "strategy_id": "target_416",
+  "target_tokens": 416,
+  "query_count": 5,
+  "top_k": 5,
+  "relevance_threshold": 0.7607258856296539,
+  "accepted_query_count": 5,
+  "threshold_acceptance_rate": 1.0,
+  "aggregate_metrics": {
+    "precision_at_1": 0.8,
+    "precision_at_3": 0.26666666666666666,
+    "precision_at_5": 0.16,
+    "recall_at_1": 0.8,
+    "recall_at_3": 0.8,
+    "recall_at_5": 0.8,
+    "group_recall_at_5": 0.8,
+    "mrr_at_5": 0.8,
+    "ndcg_at_5": 0.8
+  },
+  "queries": [
+    {
+      "query_id": "h01",
+      "query": "Does Medicare cover health care while I am traveling outside the U.S.?",
+      "category": "travel_coverage",
+      "gold_pages": [
+        53
+      ],
+      "gold_source_units": [
+        908,
+        909
+      ],
+      "top_score": 0.8739233016967773,
+      "relevance_threshold": 0.7607258856296539,
+      "threshold_margin": 0.11319741606712341,
+      "accepted_by_relevance_gate": true,
+      "relevance_reason": "relevant",
+      "first_relevant_rank": 1,
+      "precision_at_1": 1.0,
+      "precision_at_3": 0.3333333333333333,
+      "precision_at_5": 0.2,
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "group_recall_at_5": 1.0,
+      "mrr_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "retrieved_top_5": [
+        {
+          "rank": 1,
+          "score": 0.8739233016967773,
+          "chunk_id": "medicare-t416-s0191-c00",
+          "page_numbers": [
+            53
+          ],
+          "source_unit_orders": [
+            907,
+            908,
+            909
+          ],
+          "is_gold_relevant": true
+        },
+        {
+          "rank": 2,
+          "score": 0.8503289222717285,
+          "chunk_id": "medicare-t416-s0054-c00",
+          "page_numbers": [
+            12
+          ],
+          "source_unit_orders": [
+            281,
+            282,
+            283,
+            284,
+            285
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 3,
+          "score": 0.7230935096740723,
+          "chunk_id": "medicare-t416-s0185-c00",
+          "page_numbers": [
+            51
+          ],
+          "source_unit_orders": [
+            883,
+            884
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 4,
+          "score": 0.7137957215309143,
+          "chunk_id": "medicare-t416-s0301-c00",
+          "page_numbers": [
+            96
+          ],
+          "source_unit_orders": [
+            1530,
+            1531
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 5,
+          "score": 0.7110437154769897,
+          "chunk_id": "medicare-t416-s0186-c00",
+          "page_numbers": [
+            51
+          ],
+          "source_unit_orders": [
+            885,
+            886,
+            887,
+            888,
+            889,
+            890
+          ],
+          "is_gold_relevant": false
+        }
+      ]
+    },
+    {
+      "query_id": "h02",
+      "query": "Who can get a yearly Medicare Wellness visit, and how often is it covered?",
+      "category": "preventive_services",
+      "gold_pages": [
+        54
+      ],
+      "gold_source_units": [
+        930
+      ],
+      "top_score": 0.8463218212127686,
+      "relevance_threshold": 0.7607258856296539,
+      "threshold_margin": 0.08559593558311462,
+      "accepted_by_relevance_gate": true,
+      "relevance_reason": "relevant",
+      "first_relevant_rank": 1,
+      "precision_at_1": 1.0,
+      "precision_at_3": 0.3333333333333333,
+      "precision_at_5": 0.2,
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "group_recall_at_5": 1.0,
+      "mrr_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "retrieved_top_5": [
+        {
+          "rank": 1,
+          "score": 0.8463218212127686,
+          "chunk_id": "medicare-t416-s0197-c00",
+          "page_numbers": [
+            54,
+            55
+          ],
+          "source_unit_orders": [
+            929,
+            930,
+            931,
+            932,
+            933,
+            934
+          ],
+          "is_gold_relevant": true
+        },
+        {
+          "rank": 2,
+          "score": 0.8321369886398315,
+          "chunk_id": "medicare-t416-s0197-c01",
+          "page_numbers": [
+            54,
+            55
+          ],
+          "source_unit_orders": [
+            929,
+            935,
+            936
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 3,
+          "score": 0.7487595081329346,
+          "chunk_id": "medicare-t416-s0002-c00",
+          "page_numbers": [
+            2
+          ],
+          "source_unit_orders": [
+            6,
+            7
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 4,
+          "score": 0.7429652214050293,
+          "chunk_id": "medicare-t416-s0143-c00",
+          "page_numbers": [
+            41
+          ],
+          "source_unit_orders": [
+            725,
+            726,
+            727
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 5,
+          "score": 0.7345010638237,
+          "chunk_id": "medicare-t416-s0180-c00",
+          "page_numbers": [
+            50
+          ],
+          "source_unit_orders": [
+            867,
+            868,
+            869,
+            870
+          ],
+          "is_gold_relevant": false
+        }
+      ]
+    },
+    {
+      "query_id": "h03",
+      "query": "For people with limited income and resources, what can the Qualified Medicare Beneficiary (QMB) Program help pay, and what charges are providers prohibited from billing?",
+      "category": "financial_assistance",
+      "gold_pages": [
+        91
+      ],
+      "gold_source_units": [
+        1454,
+        1455
+      ],
+      "top_score": 0.8324951529502869,
+      "relevance_threshold": 0.7607258856296539,
+      "threshold_margin": 0.07176926732063293,
+      "accepted_by_relevance_gate": true,
+      "relevance_reason": "relevant",
+      "first_relevant_rank": 1,
+      "precision_at_1": 1.0,
+      "precision_at_3": 0.3333333333333333,
+      "precision_at_5": 0.2,
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "group_recall_at_5": 1.0,
+      "mrr_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "retrieved_top_5": [
+        {
+          "rank": 1,
+          "score": 0.8324951529502869,
+          "chunk_id": "medicare-t416-s0288-c00",
+          "page_numbers": [
+            91
+          ],
+          "source_unit_orders": [
+            1450,
+            1451,
+            1452,
+            1453,
+            1454,
+            1455,
+            1456,
+            1457,
+            1458
+          ],
+          "is_gold_relevant": true
+        },
+        {
+          "rank": 2,
+          "score": 0.7843974232673645,
+          "chunk_id": "medicare-t416-s0288-c01",
+          "page_numbers": [
+            91,
+            92
+          ],
+          "source_unit_orders": [
+            1450,
+            1451,
+            1452,
+            1453,
+            1459,
+            1460,
+            1461,
+            1462
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 3,
+          "score": 0.7172650694847107,
+          "chunk_id": "medicare-t416-s0291-c00",
+          "page_numbers": [
+            92
+          ],
+          "source_unit_orders": [
+            1469,
+            1470,
+            1471,
+            1472,
+            1473,
+            1474,
+            1475
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 4,
+          "score": 0.7172608375549316,
+          "chunk_id": "medicare-t416-s0412-c00",
+          "page_numbers": [
+            120
+          ],
+          "source_unit_orders": [
+            1945,
+            1946
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 5,
+          "score": 0.7098620533943176,
+          "chunk_id": "medicare-t416-s0209-c00",
+          "page_numbers": [
+            58,
+            59
+          ],
+          "source_unit_orders": [
+            1002,
+            1003,
+            1004,
+            1005,
+            1006
+          ],
+          "is_gold_relevant": false
+        }
+      ]
+    },
+    {
+      "query_id": "h04",
+      "query": "What does Medigap help pay for, and what does it generally not cover?",
+      "category": "medigap",
+      "gold_pages": [
+        75
+      ],
+      "gold_source_units": [
+        1246,
+        1247
+      ],
+      "top_score": 0.782477855682373,
+      "relevance_threshold": 0.7607258856296539,
+      "threshold_margin": 0.021751970052719116,
+      "accepted_by_relevance_gate": true,
+      "relevance_reason": "relevant",
+      "first_relevant_rank": 1,
+      "precision_at_1": 1.0,
+      "precision_at_3": 0.3333333333333333,
+      "precision_at_5": 0.2,
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "group_recall_at_5": 1.0,
+      "mrr_at_5": 1.0,
+      "ndcg_at_5": 1.0,
+      "retrieved_top_5": [
+        {
+          "rank": 1,
+          "score": 0.782477855682373,
+          "chunk_id": "medicare-t416-s0241-c00",
+          "page_numbers": [
+            75
+          ],
+          "source_unit_orders": [
+            1242,
+            1243,
+            1244,
+            1245,
+            1246,
+            1247
+          ],
+          "is_gold_relevant": true
+        },
+        {
+          "rank": 2,
+          "score": 0.745290219783783,
+          "chunk_id": "medicare-t416-s0246-c00",
+          "page_numbers": [
+            77
+          ],
+          "source_unit_orders": [
+            1281,
+            1282,
+            1283,
+            1284,
+            1285,
+            1286,
+            1287
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 3,
+          "score": 0.7332457900047302,
+          "chunk_id": "medicare-t416-s0223-c01",
+          "page_numbers": [
+            65,
+            66
+          ],
+          "source_unit_orders": [
+            1089,
+            1098,
+            1099,
+            1100,
+            1101,
+            1102,
+            1103,
+            1104
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 4,
+          "score": 0.7102468013763428,
+          "chunk_id": "medicare-t416-s0047-c00",
+          "page_numbers": [
+            10
+          ],
+          "source_unit_orders": [
+            235,
+            236,
+            237,
+            238
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 5,
+          "score": 0.7074058651924133,
+          "chunk_id": "medicare-t416-s0223-c00",
+          "page_numbers": [
+            65
+          ],
+          "source_unit_orders": [
+            1089,
+            1090,
+            1091,
+            1092,
+            1093,
+            1094,
+            1095,
+            1096,
+            1097
+          ],
+          "is_gold_relevant": false
+        }
+      ]
+    },
+    {
+      "query_id": "h05",
+      "query": "What are two examples of services that Original Medicare does not cover?",
+      "category": "coverage_exclusions",
+      "gold_pages": [
+        55
+      ],
+      "gold_source_units": [
+        944,
+        945
+      ],
+      "top_score": 0.7730830907821655,
+      "relevance_threshold": 0.7607258856296539,
+      "threshold_margin": 0.012357205152511597,
+      "accepted_by_relevance_gate": true,
+      "relevance_reason": "relevant",
+      "first_relevant_rank": null,
+      "precision_at_1": 0.0,
+      "precision_at_3": 0.0,
+      "precision_at_5": 0.0,
+      "recall_at_1": 0.0,
+      "recall_at_3": 0.0,
+      "recall_at_5": 0.0,
+      "group_recall_at_5": 0.0,
+      "mrr_at_5": 0.0,
+      "ndcg_at_5": 0.0,
+      "retrieved_top_5": [
+        {
+          "rank": 1,
+          "score": 0.7730830907821655,
+          "chunk_id": "medicare-t416-s0053-c00",
+          "page_numbers": [
+            12
+          ],
+          "source_unit_orders": [
+            272,
+            273,
+            274,
+            275,
+            276,
+            277,
+            278,
+            279,
+            280
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 2,
+          "score": 0.7668310403823853,
+          "chunk_id": "medicare-t416-s0199-c00",
+          "page_numbers": [
+            55
+          ],
+          "source_unit_orders": [
+            939,
+            940,
+            941,
+            942,
+            943
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 3,
+          "score": 0.7582865357398987,
+          "chunk_id": "medicare-t416-s0203-c00",
+          "page_numbers": [
+            56
+          ],
+          "source_unit_orders": [
+            954,
+            955,
+            956,
+            957,
+            958
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 4,
+          "score": 0.7454948425292969,
+          "chunk_id": "medicare-t416-s0424-c00",
+          "page_numbers": [
+            121,
+            122
+          ],
+          "source_unit_orders": [
+            1979,
+            1980,
+            1981
+          ],
+          "is_gold_relevant": false
+        },
+        {
+          "rank": 5,
+          "score": 0.7356409430503845,
+          "chunk_id": "medicare-t416-s0054-c00",
+          "page_numbers": [
+            12
+          ],
+          "source_unit_orders": [
+            281,
+            282,
+            283,
+            284,
+            285
+          ],
+          "is_gold_relevant": false
+        }
+      ]
+    }
+  ]
+}
