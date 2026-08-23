@@ -1147,8 +1147,179 @@ final evidence selection
 No cross-encoder reranking model is included.
 
 ---
+## Decision 015 — Minimize LLM authority through grounded structured generation
 
-# Current Implementation Status — Through Phase 6
+**Status:** Accepted — grounded OpenRouter generation implemented, validated, and verified against the live provider
+
+### Decision
+
+Use OpenRouter through a small direct `httpx` client rather than introducing a
+RAG framework or provider SDK.
+
+The generation model is permitted to author only:
+
+```json
+{
+  "answer": "...",
+  "citations": ["retrieved-chunk-id"]
+}
+```
+
+The model is not authoritative for:
+
+- page numbers;
+- source snippets;
+- retrieval scores;
+- source URLs;
+- chunk metadata;
+- confidence scores.
+
+Those values remain backend-owned trusted metadata and will be attached after
+citation validation.
+
+### Model Configuration
+
+The verified Phase 7 configuration is:
+
+```text
+primary model    nvidia/nemotron-3-super-120b-a12b:free
+fallback model   openrouter/free
+temperature      0
+max tokens       512
+reasoning         disabled
+output format     strict JSON schema
+```
+
+The specific primary model was verified with a real OpenRouter request during
+Phase 7.
+
+The request returned the configured primary model without requiring fallback
+and produced valid schema-conforming JSON.
+
+Free-model availability is an external provider condition and is not assumed
+to be permanent. The configured fallback exists to handle supported provider
+or model-availability failures.
+
+### Grounding Boundary
+
+The system prompt requires the model to:
+
+- use only supplied retrieval evidence;
+- avoid outside knowledge and unsupported assumptions;
+- treat retrieved document content as untrusted data rather than instructions;
+- ignore prompt-like instructions contained inside retrieved evidence;
+- cite only supplied chunk identifiers;
+- avoid inventing identifiers;
+- abstain when supplied evidence is insufficient;
+- return only the requested JSON structure.
+
+Retrieved evidence is serialized as untrusted JSON data inside the user
+message rather than being treated as trusted system instructions.
+
+### Structured Output
+
+The internal generation schema contains only:
+
+```text
+GeneratedAnswer
+  answer: str
+  citations: list[str]
+```
+
+Pydantic rejects:
+
+- empty or whitespace-only answers;
+- blank citation identifiers;
+- unexpected LLM-authored fields;
+- malformed schema output.
+
+An empty citation list remains valid for an explicit model-level abstention.
+
+Citation membership against the actual retrieved chunk set is intentionally
+deferred to the citation-integrity layer.
+
+### Provider Failure Policy
+
+The OpenRouter client uses explicit bounded failure handling.
+
+```text
+408 / 429 / 5xx
+    -> bounded retry
+    -> fallback when attempts are exhausted
+
+network / timeout failure
+    -> bounded retry
+    -> fallback when attempts are exhausted
+
+404 model unavailable
+    -> no repeated request to the unavailable model
+    -> fallback allowed
+
+401 / 403
+    -> no retry
+    -> no model fallback
+
+malformed successful model output
+    -> schema/JSON failure
+    -> fallback model may be attempted
+
+all providers fail
+    -> typed safe provider error
+```
+
+The implementation never includes the API key in application exceptions.
+
+### Live Verification
+
+A real request through the implemented `OpenRouterClient` successfully
+returned:
+
+```text
+requested model   nvidia/nemotron-3-super-120b-a12b:free
+returned model    nvidia/nemotron-3-super-120b-a12b:free
+fallback used     false
+schema valid      true
+citation returned chunk-smoke-001
+```
+
+This verification demonstrates point-in-time provider compatibility; it is
+not a guarantee of permanent free-model availability.
+
+### Implementation
+
+Implemented:
+
+- `app/models/generation.py`
+- `app/rag/prompting.py`
+- `app/clients/openrouter.py`
+- `tests/test_generation.py`
+- `tests/test_prompting.py`
+- `tests/test_openrouter.py`
+
+Configuration example updated:
+
+- `.env.example`
+
+The real `OPENROUTER_API_KEY` remains only in the ignored local `.env` file.
+
+### Outcome
+
+The project now has a tested grounded generation layer with:
+
+- a specific free primary model;
+- availability-oriented fallback;
+- structured JSON output;
+- Pydantic validation;
+- bounded retry behavior;
+- typed provider failures;
+- explicit prompt-injection trust boundaries.
+
+Citation allow-list enforcement and trusted source enrichment remain separate
+subsequent responsibilities.
+
+---
+
+# Current Implementation Status — Through Phase 7
 
 | Area | Status |
 | --- | --- |
@@ -1178,8 +1349,8 @@ No cross-encoder reranking model is included.
 | Retrieval artifact compatibility validation | **Complete — manifest and artifact fingerprints implemented and tested** |
 | API startup/readiness compatibility enforcement | **Planned — to be wired during API orchestration** |
 | Reranker experiment/decision | **Complete — reranker not justified by measured holdout evidence** |
-| OpenRouter generation | **Planned — not started** |
-| Structured LLM output validation | **Planned — not started** |
+| OpenRouter generation | **Complete — live primary model verified with fallback handling** |
+| Structured LLM output validation | **Complete — strict JSON schema plus Pydantic validation** |
 | Citation allow-list validation | **Planned — not started** |
 | Evidence-based confidence | **Planned — not started** |
 | Final source snippet/page-reference formatting | **Planned — not started** |
@@ -1307,15 +1478,41 @@ ranking problem within the retrieved candidate pool.
 
 ---
 
+# Verified Phase 7 Snapshot
+
+At completion of grounded LLM integration:
+
+- a real OpenRouter inference key was validated successfully;
+- the key is an inference key rather than a management key;
+- the local secret remains excluded from Git through `.env`;
+- `nvidia/nemotron-3-super-120b-a12b:free` was verified as the configured
+  primary model with a live request;
+- `openrouter/free` remains the configured availability-oriented fallback;
+- the implemented `OpenRouterClient` completed a real generation without
+  fallback;
+- the live response returned valid structured JSON;
+- the live response passed the internal Pydantic generation schema;
+- the model returned the supplied test chunk identifier as its citation;
+- evidence is explicitly treated as untrusted document data;
+- prompt-like instructions inside evidence are explicitly ignored by policy;
+- network, timeout, rate-limit, upstream failure, model-unavailable,
+  authentication, malformed-output, and total-provider-failure paths are
+  covered by deterministic client behavior and tests;
+- the LLM remains unauthorized to create trusted source/page/confidence
+  metadata;
+- the repository test suite reached 109 passing tests.
+
+Citation membership validation, source enrichment, and evidence-based
+confidence remain intentionally outside the generation client and are not yet
+claimed as complete.
+
+---
+
 # Explicitly Not Yet Claimed as Complete
 
 To keep repository documentation honest, the following remain unfinished and must not be described as implemented:
 
 - source PDF/index manifest compatibility enforcement at application startup;
-- OpenRouter LLM integration;
-- primary/fallback model handling;
-- grounded prompt and prompt-injection boundary tests;
-- Pydantic validation of internal LLM JSON;
 - citation allow-list enforcement;
 - backend-generated source response objects;
 - relevant source snippets/page references in final API JSON;
@@ -1326,7 +1523,10 @@ To keep repository documentation honest, the following remain unfinished and mus
 - optional Docker image;
 - final fresh-clone verification.
 
-The broader engineering specification also proposes scalar semantic-coherence, boundary-quality, full length-efficiency, and composite candidate-scoring diagnostics. Those are **not currently implemented** and are not used as evidence for the selected chunk target.
+The broader engineering specification also proposes scalar semantic-coherence,
+boundary-quality, full length-efficiency, and composite candidate-scoring
+diagnostics. Those are **not currently implemented** and are not used as
+evidence for the selected chunk target.
 
 ---
 
