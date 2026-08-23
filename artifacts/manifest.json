@@ -1,0 +1,36 @@
+{
+  "manifest_version": 1,
+  "document": {
+    "document_id": "medicare",
+    "path": "data/medicare.pdf",
+    "sha256": "89ba6c75d91a2cb606fd53606366d1ae977d6e5c703335569814117dcce6add9",
+    "page_count": 128,
+    "byte_size": 4719868
+  },
+  "embedding": {
+    "model": "BAAI/bge-small-en-v1.5",
+    "dimension": 384
+  },
+  "chunking": {
+    "strategy_id": "target_416",
+    "target_tokens": 416,
+    "chunk_count": 481
+  },
+  "index": {
+    "type": "IndexFlatIP",
+    "dimension": 384,
+    "vector_count": 481,
+    "directory": "artifacts/indexes/selected",
+    "index_sha256": "346b10234d6b35032243038ee2c1b597e6b029c13e4b42b5273581de2ee36beb",
+    "metadata_sha256": "8072c2b7bd9338073e88f615ddab021d8f9d6e8ad471282dcf7522cc37a6513d"
+  },
+  "relevance": {
+    "threshold": 0.7607258856296539,
+    "score_definition": "rank_1 normalized embedding inner-product similarity"
+  },
+  "source_artifacts": {
+    "selected_strategy": "artifacts/selected_strategy.json",
+    "relevance_calibration": "artifacts/relevance_calibration.json",
+    "index_metadata": "artifacts/indexes/selected/metadata.json"
+  }
+}

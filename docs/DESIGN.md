@@ -908,6 +908,66 @@ The parser therefore combines explicit whitespace, geometric separation, and pun
 Regression tests verify the previously observed failures on physical pages 11, 17, and 80.
 
 ---
+## Decision 012 — Validate persisted retrieval artifacts with a compatibility manifest
+
+**Status:** Accepted — manifest generation and runtime compatibility validation implemented and tested
+
+### Decision
+
+Persist a retrieval manifest that records the exact document, embedding,
+chunking, FAISS-index, and relevance-calibration configuration used by the
+selected production retrieval system.
+
+The runtime must validate the manifest against the live persisted artifacts
+before treating them as compatible.
+
+This prevents a stale or mismatched PDF, vector index, metadata file,
+embedding configuration, or chunking configuration from being served
+silently.
+
+### Manifest Contents
+
+The persisted manifest records:
+
+- manifest schema version;
+- document ID;
+- source PDF path;
+- source PDF SHA-256;
+- source PDF physical page count;
+- source PDF byte size;
+- embedding model;
+- embedding dimension;
+- selected chunking strategy;
+- target token size;
+- chunk count;
+- FAISS index type;
+- FAISS vector dimension;
+- FAISS vector count;
+- selected-index directory;
+- SHA-256 of `index.faiss`;
+- SHA-256 of `metadata.json`;
+- calibrated relevance threshold;
+- relevance-score definition;
+- paths to the source selection/calibration/index metadata artifacts.
+
+### Verified Production Configuration
+
+For the current Medicare retrieval system:
+
+```text
+document_id          medicare
+document_sha256      89ba6c75d91a2cb606fd53606366d1ae977d6e5c703335569814117dcce6add9
+page_count           128
+embedding_model      BAAI/bge-small-en-v1.5
+embedding_dimension  384
+strategy_id          target_416
+target_tokens        416
+chunk_count          481
+index_type           IndexFlatIP
+vector_count         481
+relevance_threshold  0.7607258856296539
+
+---
 
 # Current Implementation Status — Through Phase 4
 
@@ -987,6 +1047,34 @@ At completion of no-answer calibration:
 
 These are calibration-set results and are not claimed as an independent estimate
 of production performance.
+
+---
+# Verified Phase 5B Snapshot
+
+At completion of retrieval-artifact compatibility hardening:
+
+- the production source PDF contains 128 physical pages;
+- its SHA-256 remains
+  `89ba6c75d91a2cb606fd53606366d1ae977d6e5c703335569814117dcce6add9`;
+- the selected embedding model remains `BAAI/bge-small-en-v1.5`;
+- the persisted embedding/index dimension is `384`;
+- the selected chunking strategy remains `target_416`;
+- the selected target size remains `416` tokens;
+- the selected corpus contains `481` chunks;
+- the production FAISS index is `IndexFlatIP`;
+- the FAISS index contains `481` vectors;
+- the calibrated relevance threshold remains
+  `0.7607258856296539`;
+- the source PDF, FAISS index, and index metadata are fingerprinted;
+- runtime validation succeeds for the current production artifacts;
+- deliberately incompatible embedding configuration is rejected;
+- unit tests also reject modified PDF, strategy/count mismatches,
+  manifest tampering, duplicate chunk IDs, metadata fingerprint changes,
+  and valid-but-different FAISS index contents.
+
+The compatibility manifest does not change retrieval ranking, chunk-strategy
+selection, or relevance calibration. It only ensures that persisted artifacts
+used together belong to the same verified retrieval configuration.
 
 
 ---
