@@ -790,7 +790,7 @@ Current selected-index SHA-256:
 Current selected-metadata SHA-256:
 
 ```text
-8072c2b7bd9338073e88f615ddab021d8f9d6e8ad471282dcf7522cc37a6513d
+5c7fc4e36cdb9c1edfa7f16a9aea44fb3a68f51bc942d2035e9d8236c4083cad
 ```
 
 If the PDF, model identity, selected strategy, index, metadata, or calibration artifacts are incompatible, application startup fails rather than silently serving with mismatched retrieval state.
@@ -804,16 +804,16 @@ The full indexing/evaluation workflow remains reproducible.
 Run from the repository root:
 
 ```powershell
-python scripts/build_document_profile.py
-python scripts/profile_token_lengths.py
-python scripts/build_candidate_chunks.py
-python scripts/build_candidate_indexes.py
-python scripts/validate_golden_queries.py
-python scripts/evaluate_chunk_strategies.py
-python scripts/select_chunk_strategy.py
-python scripts/calibrate_relevance_threshold.py
-python scripts/evaluate_holdout.py
-python scripts/build_manifest.py
+python -m scripts.build_document_profile
+python -m scripts.profile_token_lengths
+python -m scripts.build_candidate_chunks
+python -m scripts.build_candidate_indexes
+python -m scripts.validate_golden_queries
+python -m scripts.evaluate_chunk_strategies
+python -m scripts.select_chunk_strategy
+python -m scripts.calibrate_relevance_threshold
+python -m scripts.evaluate_holdout
+python -m scripts.build_manifest
 ```
 
 Generated candidate chunk corpora and candidate indexes are intentionally ignored by Git.

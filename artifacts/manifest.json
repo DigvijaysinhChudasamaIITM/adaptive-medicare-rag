@@ -22,7 +22,7 @@
     "vector_count": 481,
     "directory": "artifacts/indexes/selected",
     "index_sha256": "346b10234d6b35032243038ee2c1b597e6b029c13e4b42b5273581de2ee36beb",
-    "metadata_sha256": "8072c2b7bd9338073e88f615ddab021d8f9d6e8ad471282dcf7522cc37a6513d"
+    "metadata_sha256": "5c7fc4e36cdb9c1edfa7f16a9aea44fb3a68f51bc942d2035e9d8236c4083cad"
   },
   "relevance": {
     "threshold": 0.7607258856296539,
